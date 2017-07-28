@@ -1,3 +1,10 @@
+# Project Config
+config.json
+gcs.json
+
+
+# --- Generic Github Node.js gitignore ---
+
 # Logs
 logs
 *.log
@@ -56,4 +63,3 @@ typings/
 
 # dotenv environment variables file
 .env
-
