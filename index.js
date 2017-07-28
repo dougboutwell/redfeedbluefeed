@@ -3,7 +3,7 @@ const moment = require('moment');
 const { join } = require('path');
 const { series } = require('async');
 
-const { publishFile, streamFile } = require('./google-cloud');
+const { writeFile, streamFile } = require('./google-cloud');
 
 const dstFolder = moment().format('YYYY/MM/DD/hh/mm/');
 

@@ -2,7 +2,7 @@ const config = require('./config.json');
 const gcs = require('@google-cloud/storage')(config.gcs);
 
 
-async function publishFile (src, dst) {
+async function writeFile (src, dst) {
   const bucket = gcs.bucket(config.gcs.bucketName);
 
   bucket.upload(src, {
@@ -25,6 +25,6 @@ function streamFile(destPath) {
 }
 
 module.exports = {
-  publishFile,
+  writeFile,
   streamFile
 };
