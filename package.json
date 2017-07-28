@@ -1,13 +1,17 @@
 {
-  "name": "web-archiver",
+  "name": "redfeedbluefeed",
   "version": "1.0.0",
-  "description": "",
+  "description": "Web service for aggregating, archiving and comparing headlines from major new websites.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Doug Boutwell <doug@dougboutwell.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dougboutwell/redfeedbluefeed.git"
+  },
   "devDependencies": {
     "@google-cloud/storage": "^1.2.1",
     "async": "^2.5.0",
