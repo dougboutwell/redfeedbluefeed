@@ -1,0 +1,17 @@
+{
+  "name": "web-archiver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "async": "^2.5.0",
+    "eslint-config-standard": "^10.2.1",
+    "moment": "^2.18.1",
+    "webshot": "^0.18.0"
+  }
+}
