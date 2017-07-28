@@ -3,8 +3,9 @@ const moment = require('moment');
 const { join } = require('path');
 const { series } = require('async');
 
-const outputBasePath = process.env['HOME'] + '/Desktop/web-archive';
-const outputPath = join(outputBasePath, moment().format('YYYY-MM-DD-hh-mm'));
+const { publishFile, streamFile } = require('./google-cloud');
+
+const dstFolder = moment().format('YYYY/MM/DD/hh/mm/');
 
 const sites = [
   {
@@ -69,8 +70,8 @@ const options = {
   },
   quality: 50,
   defaultWhiteBackground: true,
+  streamType: 'jpg',
   timeout: 60 * 1000,
-  // renderDelay: 20 * 1000,
   userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us)'
     + ' AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
 };
@@ -82,7 +83,19 @@ function takeScreenshot(site) {
   };
 }
 
-// const promises = [];
+function streamScreenshot(site) {
+  console.log(site.name);
+  return webshot(site.url, options);
+}
+
 console.log('Beginning Screenshots...');
 
-series(sites.map(takeScreenshot));
+for (const i in sites) {
+  const site = sites[i];
+  const destPath = join(dstFolder, site.outFile + '.jpg');
+  const stream = streamScreenshot(site);
+  stream.pipe(streamFile(destPath));
+  break;
+}
+
+// series(sites.map(takeScreenshot));
