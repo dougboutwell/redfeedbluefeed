@@ -1,9 +1,10 @@
 const webshot = require('webshot');
 const moment = require('moment');
 const { join } = require('path');
-const { series } = require('async');
+// const { series } = require('async');
+const mozjpeg = require('mozjpeg-stream');
 
-const { writeFile, streamFile } = require('./google-cloud');
+const { streamFile } = require('./google-cloud');
 
 const dstFolder = moment().format('YYYY/MM/DD/hh/mm/');
 
@@ -68,34 +69,53 @@ const options = {
     width: 'all',
     height: '2000'
   },
-  quality: 50,
+  quality: 100,
   defaultWhiteBackground: true,
   streamType: 'jpg',
-  timeout: 60 * 1000,
+  timeout: 180 * 1000,
   userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_2 like Mac OS X; en-us)'
     + ' AppleWebKit/531.21.20 (KHTML, like Gecko) Mobile/7B298g'
 };
 
-function takeScreenshot(site) {
-  return function (cb) {
+// function takeScreenshot(site) {
+//   return function (cb) {
+//     console.log(site.name);
+//     webshot(site.url, join(outputPath, site.outFile + '.jpg'), options, cb);
+//   };
+// }
+
+// Returns a stream of the screenshot at url
+function streamScreenshot(url) {
+  return webshot(url, options);
+}
+
+// Wrap the streaming snapshot + GCS write into a promise
+function processSite (site) {
+  return new Promise((resolve, reject) => {
     console.log(site.name);
-    webshot(site.url, join(outputPath, site.outFile + '.jpg'), options, cb);
-  };
+    const destPath = join(dstFolder, site.outFile + '.jpg');
+    const stream = streamScreenshot(site.url);
+    stream.pipe(mozjpeg({quality: 50}))
+      .pipe(streamFile(destPath))
+      .on('end', () => resolve())
+      .on('finish', () => resolve())
+      .on('close', () => resolve())
+      .on('error', (err) => reject(err));
+  });
 }
 
-function streamScreenshot(site) {
-  console.log(site.name);
-  return webshot(site.url, options);
+async function processAll () {
+  for (const i in sites) {
+    const site = sites[i];
+    try {
+      await processSite(site);
+    } catch (e) {
+      console.log(`ERROR: could not process ${site.name} - ${e.message}`);
+    }
+    // break;
+  }
 }
 
-console.log('Beginning Screenshots...');
-
-for (const i in sites) {
-  const site = sites[i];
-  const destPath = join(dstFolder, site.outFile + '.jpg');
-  const stream = streamScreenshot(site);
-  stream.pipe(streamFile(destPath));
-  break;
-}
+processAll();
 
 // series(sites.map(takeScreenshot));
