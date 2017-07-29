@@ -3,9 +3,10 @@ const gcs = require('@google-cloud/storage')(config.gcs);
 
 const gcsOptions = {
   public: true,
-  metadata: {
-    cacheControl: "public, immutable, max-age=315360000"
-  }
+  // Not all files should be cached (in particular, latest.json)
+  // metadata: {
+  //   cacheControl: "public, immutable, max-age=315360000"
+  // }
 };
 
 async function writeFile (src, dst) {
