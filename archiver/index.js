@@ -6,7 +6,8 @@ const mozjpeg = require('mozjpeg-stream');
 
 const { streamFile } = require('./google-cloud');
 
-const dstFolder = moment().format('YYYY/MM/DD/hh/');
+const now = moment().utc();
+const dstFolder = now.format('YYYY-MM-DD_hh');
 
 const sites = [
   {
