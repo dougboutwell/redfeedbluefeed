@@ -4,11 +4,12 @@ const { join } = require('path');
 const mozjpeg = require('mozjpeg-stream');
 const { streamFile, writeJSON } = require('./google-cloud');
 
-const config = require('./config.json');
+const webshotOptions = require('./config/webshot.json');
+var sites = require('./config/sites.json');
 
 // Returns a stream of the screenshot at url
 function streamScreenshot(url) {
-  return webshot(url, config.options);
+  return webshot(url, webshotOptions);
 }
 
 // Wrap the streaming snapshot + GCS write into a promise
@@ -36,8 +37,8 @@ async function processAll () {
   };
 
   // Process each site
-  for (const i in config.sites) {
-    const site = config.sites[i];
+  for (const i in sites) {
+    const site = sites[i];
     try {
       console.log(site.name);
       site.filePath = join(dstFolder, `${ts}-${site.shortName}.jpg`);

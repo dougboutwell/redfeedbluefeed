@@ -1,0 +1,5 @@
+{
+  "projectId": "red-feed-blue-feed",
+  "keyFilename": "./archiver/config/gcs.json",
+  "bucketName": "redfeedbluefeed-snaps-mobile-2017"
+}

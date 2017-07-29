@@ -1,0 +1,51 @@
+[
+  {
+    "name": "CNN",
+    "url": "http://cnn.com",
+    "shortName": "cnn"
+  }, {
+    "name": "Fox News",
+    "url": "http://foxnews.com",
+    "shortName": "foxnews"
+  }, {
+    "name": "Wall Street Journal",
+    "url": "http://wsj.com",
+    "shortName": "wsj"
+  }, {
+    "name": "Washington Post",
+    "url": "http://washingtonpost.com",
+    "shortName": "washingtonpost"
+  }, {
+    "name": "NY Times",
+    "url": "http://nytimes.com",
+    "shortName": "nytimes"
+  }, {
+    "name": "Red State",
+    "url": "http://redstate.com",
+    "shortName": "redstate"
+  }, {
+    "name": "Breitbart",
+    "url": "http://breitbart.com",
+    "shortName": "breitbart"
+  }, {
+    "name": "Huffington Post",
+    "url": "http://huffingtonpost.com",
+    "shortName": "huffingtonpost"
+  }, {
+    "name": "USA Today",
+    "url": "http://usatoday.com",
+    "shortName": "usatoday"
+  }, {
+    "name": "Politico",
+    "url": "http://politico.com",
+    "shortName": "politico"
+  }, {
+    "name": "The Hill",
+    "url": "http://thehill.com",
+    "shortName": "thehill"
+  }, {
+    "name": "MSNBC",
+    "url": "http://msnbc.com",
+    "shortName": "msnbc"
+  }
+]

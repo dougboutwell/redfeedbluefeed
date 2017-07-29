@@ -1,5 +1,8 @@
-const config = require('./config.json');
-const gcs = require('@google-cloud/storage')(config.gcs);
+const config = require('./config/google-cloud.json');
+const gcs = require('@google-cloud/storage')(config);
+
+// singleton bucket object - init once.
+const bucket = gcs.bucket(config.bucketName);
 
 const gcsOptions = {
   public: true,
@@ -10,7 +13,6 @@ const gcsOptions = {
 };
 
 async function writeFile (src, dst) {
-  const bucket = gcs.bucket(config.gcs.bucketName);
   const options = Object.assign({ destination: dst }, gcsOptions);
   bucket.upload(src, options, (err, file, apiResponse) => {
     if (err) {
@@ -21,7 +23,6 @@ async function writeFile (src, dst) {
 }
 
 async function streamFile (destPath) {
-  const bucket = gcs.bucket(config.gcs.bucketName);
   const file = bucket.file(destPath);
   if (await fileExists(file)) {
     await deleteFile(file);
