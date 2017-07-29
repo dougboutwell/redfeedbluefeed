@@ -6,7 +6,7 @@ const mozjpeg = require('mozjpeg-stream');
 
 const { streamFile } = require('./google-cloud');
 
-const dstFolder = moment().format('YYYY/MM/DD/hh/mm/');
+const dstFolder = moment().format('YYYY/MM/DD/hh/');
 
 const sites = [
   {
@@ -97,9 +97,9 @@ function processSite (site) {
     const stream = streamScreenshot(site.url);
     stream.pipe(mozjpeg({quality: 50}))
       .pipe(streamFile(destPath))
-      .on('end', () => resolve())
+      // .on('end', () => resolve())
       .on('finish', () => resolve())
-      .on('close', () => resolve())
+      // .on('close', () => resolve())
       .on('error', (err) => reject(err));
   });
 }

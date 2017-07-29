@@ -1,6 +1,7 @@
 {
   "gcs": {
     "projectId": "",
-    "keyFilename": ""
+    "keyFilename": "",
+    "bucketname": ""
   }
 }
