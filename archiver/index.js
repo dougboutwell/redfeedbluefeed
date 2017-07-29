@@ -4,7 +4,7 @@ const { join } = require('path');
 const mozjpeg = require('mozjpeg-stream');
 const { streamFile, writeJSON } = require('./google-cloud');
 
-const config = require('./config.test.json');
+const config = require('./config.json');
 
 // Returns a stream of the screenshot at url
 function streamScreenshot(url) {
@@ -48,10 +48,12 @@ async function processAll () {
     }
   }
 
-  // Write manifest
+  // Write manifests
   const manifestPath = join(dstFolder, 'manifest.json');
+  const latestPath = 'latest.json';
   try {
     await writeJSON(manifestPath, manifestData);
+    await writeJSON(latestPath, manifestData);
   } catch (e) {
     console.log(`ERROR: could not write manifest to ${manifestPath} - ${e.message}`)
   }
