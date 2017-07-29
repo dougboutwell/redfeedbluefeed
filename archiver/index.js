@@ -13,51 +13,51 @@ const sites = [
   {
     name: 'CNN',
     url: 'http://cnn.com',
-    outFile: 'cnn'
+    shortName: 'cnn'
   }, {
     name: 'Fox News',
     url: 'http://foxnews.com',
-    outFile: 'foxnews'
+    shortName: 'foxnews'
   }, {
     name: 'Wall Street Journal',
     url: 'http://wsj.com',
-    outFile: 'wsj'
+    shortName: 'wsj'
   }, {
     name: 'Washington Post',
     url: 'http://washingtonpost.com',
-    outFile: 'washingtonpost'
+    shortName: 'washingtonpost'
   }, {
     name: 'NY Times',
     url: 'http://nytimes.com',
-    outFile: 'nytimes'
+    shortName: 'nytimes'
   }, {
     name: 'Red State',
     url: 'http://redstate.com',
-    outFile: 'redstate'
+    shortName: 'redstate'
   }, {
     name: 'Breitbart',
     url: 'http://breitbart.com',
-    outFile: 'breitbart'
+    shortName: 'breitbart'
   }, {
     name: 'Huffington Post',
     url: 'http://huffingtonpost.com',
-    outFile: 'huffingtonpost'
+    shortName: 'huffingtonpost'
   }, {
     name: 'USA Today',
     url: 'http://usatoday.com',
-    outFile: 'usatoday'
+    shortName: 'usatoday'
   }, {
     name: 'Politico',
     url: 'http://politico.com',
-    outFile: 'politico'
+    shortName: 'politico'
   }, {
     name: 'The Hill',
     url: 'http://thehill.com',
-    outFile: 'thehill'
+    shortName: 'thehill'
   }, {
     name: 'MSNBC',
     url: 'http://msnbc.com',
-    outFile: 'msnbc'
+    shortName: 'msnbc'
   }
 ];
 
@@ -81,7 +81,7 @@ const options = {
 // function takeScreenshot(site) {
 //   return function (cb) {
 //     console.log(site.name);
-//     webshot(site.url, join(outputPath, site.outFile + '.jpg'), options, cb);
+//     webshot(site.url, join(outputPath, site.shortName + '.jpg'), options, cb);
 //   };
 // }
 
@@ -94,7 +94,7 @@ function streamScreenshot(url) {
 function processSite (site) {
   return new Promise((resolve, reject) => {
     console.log(site.name);
-    const destPath = join(dstFolder, site.outFile + '.jpg');
+    const destPath = join(dstFolder, site.shortName + '.jpg');
     const stream = streamScreenshot(site.url);
     stream.pipe(mozjpeg({quality: 50}))
       .pipe(streamFile(destPath))
