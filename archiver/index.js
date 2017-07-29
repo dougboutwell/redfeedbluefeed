@@ -1,9 +1,7 @@
 const webshot = require('webshot');
 const moment = require('moment');
 const { join } = require('path');
-// const { series } = require('async');
 const mozjpeg = require('mozjpeg-stream');
-
 const { streamFile } = require('./google-cloud');
 
 const now = moment().utc();
@@ -98,9 +96,7 @@ function processSite (site) {
     const stream = streamScreenshot(site.url);
     stream.pipe(mozjpeg({quality: 50}))
       .pipe(streamFile(destPath))
-      // .on('end', () => resolve())
       .on('finish', () => resolve())
-      // .on('close', () => resolve())
       .on('error', (err) => reject(err));
   });
 }
@@ -118,5 +114,3 @@ async function processAll () {
 }
 
 processAll();
-
-// series(sites.map(takeScreenshot));
