@@ -60,6 +60,7 @@ html {
 body,
 html {
   font-family: 'Lora', serif;
+  text-align: center;
 }
 
 h1 {
@@ -74,6 +75,11 @@ hr {
   background-color: #ccc;
   border: 0;
   display: block;
+}
+
+.timestamp {
+  font-size: 14px;
+  text-align: center;
 }
 
 .scrollContainer {
