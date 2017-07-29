@@ -2,9 +2,9 @@ const webshot = require('webshot');
 const moment = require('moment');
 const { join } = require('path');
 const mozjpeg = require('mozjpeg-stream');
-const { streamFile } = require('./google-cloud');
+const { streamFile, writeJSON } = require('./google-cloud');
 
-const config = require('./config.json');
+const config = require('./config.test.json');
 
 // Returns a stream of the screenshot at url
 function streamScreenshot(url) {
@@ -12,11 +12,12 @@ function streamScreenshot(url) {
 }
 
 // Wrap the streaming snapshot + GCS write into a promise
-function processSite (site) {
+async function processSite (site) {
+  const destStream = await streamFile(site.filePath);
   return new Promise((resolve, reject) => {
     const stream = streamScreenshot(site.url);
     stream.pipe(mozjpeg({quality: 50}))
-      .pipe(streamFile(site.filePath))
+      .pipe(destStream)
       .on('finish', () => resolve())
       .on('error', (err) => reject(err));
   });
@@ -34,6 +35,7 @@ async function processAll () {
     sites: []
   };
 
+  // Process each site
   for (const i in config.sites) {
     const site = config.sites[i];
     try {
@@ -46,12 +48,10 @@ async function processAll () {
     }
   }
 
+  // Write manifest
   const manifestPath = join(dstFolder, 'manifest.json');
-
-  try{
-    const manifest = streamFile(manifestPath);
-    manifest.write(JSON.stringify(manifestData));
-    manifest.end();
+  try {
+    await writeJSON(manifestPath, manifestData);
   } catch (e) {
     console.log(`ERROR: could not write manifest to ${manifestPath} - ${e.message}`)
   }
