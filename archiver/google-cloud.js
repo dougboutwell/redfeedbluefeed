@@ -20,7 +20,10 @@ function streamFile(destPath) {
   const bucket = gcs.bucket(config.gcs.bucketName);
   const file = bucket.file(destPath);
   return file.createWriteStream({
-    public: true
+    public: true,
+    metadata: {
+      cacheControl: "public, immutable, max-age=315360000"
+    }
   })
 }
 
