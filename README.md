@@ -3,7 +3,6 @@
 Web service for aggregating, archiving and comparing headlines from major new
 websites.
 
-
 ## Google Cloud Storage Authentication
 
 Needs a gcs.json file with the auth goodies from Google. Put it in
