@@ -4,10 +4,7 @@ const { join } = require('path');
 const mozjpeg = require('mozjpeg-stream');
 const { streamFile } = require('./google-cloud');
 
-const now = moment().utc();
-const dstFolder = now.format('YYYY-MM-DD_hh');
-
-const sites = [
+var sites = [
   {
     name: 'CNN',
     url: 'http://cnn.com',
@@ -91,25 +88,46 @@ function streamScreenshot(url) {
 // Wrap the streaming snapshot + GCS write into a promise
 function processSite (site) {
   return new Promise((resolve, reject) => {
-    console.log(site.name);
-    const destPath = join(dstFolder, site.shortName + '.jpg');
     const stream = streamScreenshot(site.url);
     stream.pipe(mozjpeg({quality: 50}))
-      .pipe(streamFile(destPath))
+      .pipe(streamFile(site.filePath))
       .on('finish', () => resolve())
       .on('error', (err) => reject(err));
   });
 }
 
 async function processAll () {
+  const now = moment().utc();
+  // Timestmap for use in file / folder names
+  const ts = now.format('YYYY-MM-DD_hh');
+  const dstFolder = ts;
+
+  var manifestData = {
+    basePath: dstFolder,
+    timestamp: now.toISOString(),
+    sites: []
+  };
+
   for (const i in sites) {
     const site = sites[i];
     try {
+      console.log(site.name);
+      site.filePath = join(dstFolder, `${ts}-${site.shortName}.jpg`);
       await processSite(site);
+      manifestData.sites.push(site);
     } catch (e) {
       console.log(`ERROR: could not process ${site.name} - ${e.message}`);
     }
-    // break;
+  }
+
+  const manifestPath = join(dstFolder, 'manifest.json');
+
+  try{
+    const manifest = streamFile(manifestPath);
+    manifest.write(JSON.stringify(manifestData));
+    manifest.end();
+  } catch (e) {
+    console.log(`ERROR: could not write manifest to ${manifestPath} - ${e.message}`)
   }
 }
 
