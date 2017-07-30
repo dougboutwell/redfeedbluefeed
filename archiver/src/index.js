@@ -3,6 +3,7 @@ const moment = require('moment');
 const { join } = require('path');
 const mozjpeg = require('mozjpeg-stream');
 const { streamFile, writeJSON } = require('./google-cloud');
+const schedule = require('node-schedule');
 
 const webshotOptions = require('../config/webshot.json');
 var sites = require('../config/sites.json');
@@ -60,4 +61,10 @@ async function processAll () {
   }
 }
 
+// Always run on startup...
 processAll();
+
+// ... then schedule to run every hour
+schedule.scheduleJob('0 0 * * * *', () => {
+  processAll();
+});
