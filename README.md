@@ -17,3 +17,10 @@ work (and possibly production deployments too). Set via
 `gsutil cors set cors.json gs://redfeedbluefeed-snaps-mobile-2017`
 
 with cors.json (tweak as needed)
+
+## Single-site archiving (mostly for testing)
+
+Just pass the short names of the sites you want to archive on the command line.
+This will archive ONLY those sites, and skip the recurring scheduling
+
+`node archiver/src/index.js cnn foxnews thehill`

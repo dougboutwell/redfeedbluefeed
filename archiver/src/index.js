@@ -8,6 +8,7 @@ const schedule = require('node-schedule');
 const webshotOptions = require('../config/webshot.json');
 var sites = require('../config/sites.json');
 
+
 // Returns a stream of the screenshot at url
 function streamScreenshot(url) {
   return webshot(url, webshotOptions);
@@ -25,8 +26,17 @@ async function processSite (site) {
   });
 }
 
-
+// Global vars
+var recurring = true;
 var nextJob;
+
+// if any sites are passed along on the command line, extract those and filter
+// the sites list
+const requestedSites = process.argv.slice(2);
+if (requestedSites.length > 0) {
+  sites = sites.filter(site => requestedSites.includes(site.shortName));
+  recurring = false
+}
 
 async function processAll () {
   const now = moment().utc();
@@ -92,12 +102,15 @@ processAll().then(() => {
      to just have the scheduled event push tasks into the queue. I'm not sure
      that's worth it at any expected scale for this app though -db.
   */
-  nextJob = schedule.scheduleJob('0 */5 * * * *', () => {
-    processAll();
-  });
+  if (recurring) {
+    nextJob = schedule.scheduleJob('0 */5 * * * *', () => {
+      processAll();
+    });
+  }
+
   if (nextJob) {
     console.log(`Next run scheduled for ${nextJob.nextInvocation().toString()}`);
-  } else {
+  } else if (recurring) {
     throw new Error('Failed to schedule next Job (nextjob == false).');
   }
 });
