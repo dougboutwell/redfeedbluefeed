@@ -2,7 +2,7 @@ FROM node:latest
 MAINTAINER Doug Boutwell "doug@dougboutwell.com"
 
 RUN useradd --user-group --create-home archiver
-RUN npm i forever -g
+RUN npm install forever -g
 
 USER archiver
 ENV HOME=/home/archiver
@@ -15,4 +15,4 @@ RUN npm install --production
 COPY ./archiver/src /home/archiver/src
 COPY ./archiver/config /home/archiver/config
 
-CMD forever start -f src/index.js
+CMD forever src/index.js -f
