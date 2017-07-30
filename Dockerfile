@@ -8,7 +8,7 @@ ENV HOME=/home/archiver
 WORKDIR /home/archiver
 
 COPY ./package.json /home/archiver/package.json
-RUN npm install
+RUN npm install --production
 
 COPY ./archiver/src /home/archiver/src
 COPY ./archiver/config /home/archiver/config
