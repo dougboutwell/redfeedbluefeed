@@ -1,4 +1,4 @@
-const config = require('./config/google-cloud.json');
+const config = require('../config/google-cloud.json');
 const gcs = require('@google-cloud/storage')(config);
 
 // singleton bucket object - init once.

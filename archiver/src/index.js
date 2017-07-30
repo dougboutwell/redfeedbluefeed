@@ -4,8 +4,8 @@ const { join } = require('path');
 const mozjpeg = require('mozjpeg-stream');
 const { streamFile, writeJSON } = require('./google-cloud');
 
-const webshotOptions = require('./config/webshot.json');
-var sites = require('./config/sites.json');
+const webshotOptions = require('../config/webshot.json');
+var sites = require('../config/sites.json');
 
 // Returns a stream of the screenshot at url
 function streamScreenshot(url) {

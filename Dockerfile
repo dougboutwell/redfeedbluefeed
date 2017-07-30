@@ -1,9 +1,16 @@
 FROM node:latest
 MAINTAINER Doug Boutwell "doug@dougboutwell.com"
 
-ADD ./archiver /archiver
-ADD package.json /archiver/package.json
-WORKDIR /archiver
-RUN npm i
+RUN useradd --user-group --create-home archiver
+USER archiver
+ENV HOME=/home/archiver
 
-CMD node index.js
+WORKDIR /home/archiver
+
+COPY ./package.json /home/archiver/package.json
+RUN npm install
+
+COPY ./archiver/src /home/archiver/src
+COPY ./archiver/config /home/archiver/config
+
+CMD node src/index.js

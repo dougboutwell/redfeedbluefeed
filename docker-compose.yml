@@ -1,14 +1,14 @@
 version: "3"
 
 services:
-  # archiver:
-  #   image: dougboutwell/redfeedbluefeed:latestURL
-  #   volumes:
-  #     - credentials:/archiver/credentials
-
-  web:
-    image: nginx
-    ports:
-      - "80:80"
+  archiver:
+    image: dougboutwell/redfeedbluefeed:latest
     volumes:
-      - ./site:/usr/share/nginx/html
+      - ./credentials:/home/archiver/credentials
+
+  # web:
+  #   image: nginx
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./site:/usr/share/nginx/html
