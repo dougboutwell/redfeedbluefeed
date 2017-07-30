@@ -1,8 +1,6 @@
 # Project Config
 config.json
-config.test.json
-gcs.json
-
+credentials/
 
 # --- Generic Github Node.js gitignore ---
 
