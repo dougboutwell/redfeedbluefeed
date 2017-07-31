@@ -11,7 +11,6 @@ const webshotOptions = require('../config/webshot.json');
 // TODO: Validate this against the expected schema.
 var config = require('../config/archiver.json');
 
-
 // Returns a stream of the screenshot at url
 function streamScreenshot(site) {
   var options = Object.assign({}, webshotOptions);
@@ -127,7 +126,7 @@ processAll().then(() => {
      that's worth it at any expected scale for this app though -db.
   */
   if (recurring) {
-    nextJob = schedule.scheduleJob(`0 0 */${config.freqency} * * *`, () => {
+    nextJob = schedule.scheduleJob(`0 0 */${config.frequency} * * *`, () => {
       processAll();
     });
   }
