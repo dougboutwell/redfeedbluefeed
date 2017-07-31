@@ -63,14 +63,19 @@ html {
   text-align: center;
 }
 
+body {
+	padding: 50px 0;
+}
+
 h1 {
   text-align: center;
-  margin: 50px auto;
   font-size: 30px;
+	margin-bottom: 15px;
 }
 
 hr {
   width: 50%;
+	margin: 40px auto;
   height: 1px;
   background-color: #ccc;
   border: 0;
@@ -95,20 +100,36 @@ hr {
 }
 
 .site {
-  margin: 20px;
+  margin: 10px;
   box-shadow: 0 6px 15px 3px rgba(0, 0, 0, 0.3);
   width: 270px;
   height: auto;
   flex-shrink: 0;
-  transform-origin: 50% 5%;
-  transition: transform 0.3s ease;
+  /*transform-origin: 50% 0%;
+  transition: transform 0.3s ease;*/
 }
 
-.site:hover {
+/*.site:hover {
   transform: scale(1.15);
-}
+}*/
 
 .siteImage {
   width: 100%;
   height: auto;
 }
+
+.siteTitle {
+	height: 60px;
+	color: #fff;
+	text-align: center;
+	font-size: 16px;
+	display: flex;
+  justify-content: center;
+	align-items: center;
+}
+
+.bias-1 { background-color: #3151c9; }
+.bias-2 { background-color: #788cf5; }
+.bias-3 { background-color: #998fa1; }
+.bias-4 { background-color: #d96d7f; }
+.bias-5 { background-color: #b12b33; }
