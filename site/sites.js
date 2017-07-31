@@ -9,7 +9,7 @@ const biasClasses = {
   '2':  'bias-5'
 };
 
-$.ajax(latestURL)
+$.ajax(latestURL, {cache: false})
   .done(function (data) {
     data = JSON.parse(data);
     console.log(data);
