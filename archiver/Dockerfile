@@ -13,4 +13,4 @@ RUN npm install --production
 COPY ./src /home/archiver/src
 COPY ./config /home/archiver/config
 
-CMD forever src/index.js -f
+CMD forever -f src/index.js
