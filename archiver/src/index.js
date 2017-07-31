@@ -24,8 +24,10 @@ function streamScreenshot(site) {
 async function processSite (site) {
   const destStream = await streamFile(site.filePath);
   return new Promise((resolve, reject) => {
-    const stream = streamScreenshot(site);
+    const stream = streamScreenshot(site)
+      .on('error', (err) => reject(err));
     stream.pipe(mozjpeg({quality: 50}))
+      .on('error', (err) => reject(err))
       .pipe(destStream)
       .on('finish', () => resolve())
       .on('error', (err) => reject(err));
