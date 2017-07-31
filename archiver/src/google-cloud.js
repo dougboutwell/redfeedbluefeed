@@ -10,6 +10,9 @@ const gcsOptions = {
   // metadata: {
   //   cacheControl: "public, immutable, max-age=315360000"
   // }
+  metadata: {
+    cacheControl: 'max-age=0, no-cache, no-store'
+  }
 };
 
 async function writeFile (src, dst) {
