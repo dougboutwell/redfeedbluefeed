@@ -114,7 +114,7 @@ processAll().then(() => {
      that's worth it at any expected scale for this app though -db.
   */
   if (recurring) {
-    nextJob = schedule.scheduleJob('0 */5 * * * *', () => {
+    nextJob = schedule.scheduleJob('0 0 */4 * * *', () => {
       processAll();
     });
   }
