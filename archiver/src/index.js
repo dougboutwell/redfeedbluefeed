@@ -56,9 +56,15 @@ async function processAll () {
   const now = moment().utc();
   console.log(`Starting site archive for ${now.toString()}`);
 
-  // Timestmap for use in file / folder names
+  // Timestmap for use in file names
   const ts = now.format('YYYY-MM-DD_HH');
-  const dstFolder = ts;
+
+  // Set the folder to the interval we're in. For instance, if run at 9:25am,
+  // with freq = 4 hours, then the folder name is 08
+  const freq = config.frequency;
+  const folderHours = Math.floor(now.hour() / freq) * freq;
+  const dateString = now.format('YYYY-MM-DD');
+  const dstFolder = `${dateString}_${folderHours < 10 ? 0 : ''}${folderHours}`;
 
   var manifestData = {
     basePath: dstFolder,
@@ -121,7 +127,7 @@ processAll().then(() => {
      that's worth it at any expected scale for this app though -db.
   */
   if (recurring) {
-    nextJob = schedule.scheduleJob('0 0 */4 * * *', () => {
+    nextJob = schedule.scheduleJob(`0 0 */${config.freqency} * * *`, () => {
       processAll();
     });
   }
