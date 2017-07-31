@@ -17,7 +17,7 @@ function streamScreenshot(site) {
   if (site.userAgent) {
     options.userAgent = site.userAgent;
   }
-  return webshot(site.url, webshotOptions);
+  return webshot(site.url, options);
 }
 
 // Wrap the streaming snapshot + GCS write into a promise
