@@ -18,8 +18,14 @@ $.ajax(latestURL, {cache: false})
 
     $('.timestamp').html(timestamp.toString());
 
-    for (var i in data.sites) {
-      var site = data.sites[i];
+    var sites = data.sites.sort(function (a, b) {
+      if (a.bias < b.bias) { return -1; }
+      else if (a.bias > b.bias) { return 1; }
+      else { return 0; }
+    });
+
+    for (var i in sites) {
+      var site = sites[i];
       var imgURL = baseURL + site.filePath;
       var bias = biasClasses[site.bias] || 'bias-3';
       console.log(bias);
