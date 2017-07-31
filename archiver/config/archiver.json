@@ -30,11 +30,6 @@
       "shortName": "washingtonpost",
       "bias": -1
     }, {
-      "name": "The Economist",
-      "url": "http://economist.com",
-      "shortName": "economist",
-      "bias": -1
-    }, {
       "name": "NY Times",
       "url": "http://nytimes.com",
       "shortName": "nytimes",
@@ -80,11 +75,6 @@
       "shortName": "bbc",
       "bias": 0
     }, {
-      "name": "The Daily Caller",
-      "url": "http://dailycaller.com",
-      "shortName": "dailycaller",
-      "bias": 1
-    }, {
       "name": "NewsMax",
       "url": "http://newsmax.com",
       "shortName": "newsmax",
@@ -114,6 +104,20 @@
       "url": "http://theblaze.com",
       "shortName": "theblaze",
       "bias": 2
+    }
+  ],
+
+  "sitesNonWorking": [
+    {
+      "name": "The Daily Caller",
+      "url": "http://dailycaller.com",
+      "shortName": "dailycaller",
+      "bias": 1
+    }, {
+      "name": "The Economist",
+      "url": "http://economist.com",
+      "shortName": "economist",
+      "bias": -1
     }
   ]
 }
