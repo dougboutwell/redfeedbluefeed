@@ -6,6 +6,8 @@ const { streamFile, writeJSON } = require('./google-cloud');
 const schedule = require('node-schedule');
 
 const webshotOptions = require('../config/webshot.json');
+
+// TODO: Validate this against the expected schema.
 var sites = require('../config/sites.json');
 
 
