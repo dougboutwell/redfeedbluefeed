@@ -46,6 +46,7 @@ var nextJob;
 const requestedSites = process.argv.slice(2);
 if (requestedSites.length > 0) {
   sites = sites.filter(site => requestedSites.includes(site.shortName));
+  console.log(`Running in single mode - sites: ${requestedSites}`);
   recurring = false
 }
 
@@ -76,16 +77,20 @@ async function processAll () {
     }
   }
 
-  // Write manifests
-  const manifestPath = join(dstFolder, 'manifest.json');
-  const latestPath = 'latest.json';
-  try {
-    console.log('manifest.json');
-    await writeJSON(manifestPath, manifestData);
-    console.log('latest.json');
-    await writeJSON(latestPath, manifestData);
-  } catch (e) {
-    console.log(`ERROR: could not write manifest to ${manifestPath} - ${e.message}`)
+  if (recurring) {
+    // Write manifests only if we're in full / normal mode
+
+    const manifestPath = join(dstFolder, 'manifest.json');
+    const latestPath = 'latest.json';
+
+    try {
+      console.log('manifest.json');
+      await writeJSON(manifestPath, manifestData);
+      console.log('latest.json');
+      await writeJSON(latestPath, manifestData);
+    } catch (e) {
+      console.log(`ERROR: could not write manifest to ${manifestPath} - ${e.message}`)
+    }
   }
   console.log(`Finished archiving at ${moment().utc().toString()}`);
 
