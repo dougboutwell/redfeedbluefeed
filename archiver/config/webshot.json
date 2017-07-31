@@ -5,7 +5,7 @@
   },
   "shotSize": {
     "width": "all",
-    "height": "all"
+    "height": 4000
   },
   "quality": 100,
   "defaultWhiteBackground": true,
