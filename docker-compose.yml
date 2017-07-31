@@ -5,6 +5,7 @@ services:
     image: dougboutwell/redfeedbluefeed-archiver:latest
     volumes:
       - ./credentials:/home/archiver/credentials
+      - ./config:/home/archiver/config
 
   site:
     image: dougboutwell/redfeedbluefeed-site:latest

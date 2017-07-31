@@ -11,6 +11,7 @@ WORKDIR /home/archiver
 COPY ./package.json /home/archiver/package.json
 RUN npm install --production
 COPY ./src /home/archiver/src
-COPY ./config /home/archiver/config
+# Keep these out of the image - Mount them as a volume instead
+# COPY ./config /home/archiver/config
 
 CMD forever -f src/index.js
