@@ -54,7 +54,7 @@ async function processAll () {
   console.log(`Starting site archive for ${now.toString()}`);
 
   // Timestmap for use in file / folder names
-  const ts = now.format('YYYY-MM-DD_hh');
+  const ts = now.format('YYYY-MM-DD_HH');
   const dstFolder = ts;
 
   var manifestData = {
