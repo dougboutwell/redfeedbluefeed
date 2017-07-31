@@ -12,15 +12,19 @@ var sites = require('../config/sites.json');
 
 
 // Returns a stream of the screenshot at url
-function streamScreenshot(url) {
-  return webshot(url, webshotOptions);
+function streamScreenshot(site) {
+  var options = Object.assign({}, webshotOptions);
+  if (site.userAgent) {
+    options.userAgent = site.userAgent;
+  }
+  return webshot(site.url, webshotOptions);
 }
 
 // Wrap the streaming snapshot + GCS write into a promise
 async function processSite (site) {
   const destStream = await streamFile(site.filePath);
   return new Promise((resolve, reject) => {
-    const stream = streamScreenshot(site.url);
+    const stream = streamScreenshot(site);
     stream.pipe(mozjpeg({quality: 50}))
       .pipe(destStream)
       .on('finish', () => resolve())
@@ -29,6 +33,9 @@ async function processSite (site) {
 }
 
 // Global vars
+// TODO: "recurring" is just a placeholder for "testing" - in that case we
+// shouldn't write the manifest, and should write it to a local file.
+// In fact, it's kinda a different thing altogether....
 var recurring = true;
 var nextJob;
 
