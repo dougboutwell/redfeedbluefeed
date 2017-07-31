@@ -7,8 +7,9 @@ const schedule = require('node-schedule');
 
 const webshotOptions = require('../config/webshot.json');
 
+
 // TODO: Validate this against the expected schema.
-var sites = require('../config/sites.json');
+var config = require('../config/archiver.json');
 
 
 // Returns a stream of the screenshot at url
@@ -44,6 +45,7 @@ var nextJob;
 // if any sites are passed along on the command line, extract those and filter
 // the sites list
 const requestedSites = process.argv.slice(2);
+var sites = config.sites;
 if (requestedSites.length > 0) {
   sites = sites.filter(site => requestedSites.includes(site.shortName));
   console.log(`Running in single mode - sites: ${requestedSites}`);
