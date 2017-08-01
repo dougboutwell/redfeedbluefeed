@@ -15,17 +15,7 @@ const gcsOptions = {
   }
 };
 
-async function writeFile (src, dst) {
-  const options = Object.assign({ destination: dst }, gcsOptions);
-  bucket.upload(src, options, (err, file, apiResponse) => {
-    if (err) {
-      console.log(err, file, apiResponse);
-      throw err;
-    }
-  });
-}
-
-async function streamFile (destPath) {
+async function createGCSStream (destPath) {
   const file = bucket.file(destPath);
   if (await fileExists(file)) {
     await deleteFile(file);
@@ -51,7 +41,7 @@ async function deleteFile (file) {
 
 // Writes json data object to a file on GCS at dstPath
 async function writeJSON (dstPath, data) {
-  const stream = await streamFile(dstPath);
+  const stream = await createGCSStream(dstPath);
   return new Promise ((resolve, reject) => {
     const manifest = stream
       .on('error', (err) => reject(err))
@@ -62,7 +52,6 @@ async function writeJSON (dstPath, data) {
 }
 
 module.exports = {
-  writeFile,
-  streamFile,
+  stream: createGCSStream,
   writeJSON
 };

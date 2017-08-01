@@ -1,32 +1,22 @@
-const webshot = require('webshot');
-const moment = require('moment');
+// 3rd party
 const { join } = require('path');
-const mozjpeg = require('mozjpeg-stream');
-const { streamFile, writeJSON } = require('./google-cloud');
+const moment = require('moment');
 const schedule = require('node-schedule');
 
-const webshotOptions = require('../config/webshot.json');
+// Project
+const gcs = require('./google-cloud');
+const snap = require('./snapshot.js');
 
-
+// Config
 // TODO: Validate this against the expected schema.
 var config = require('../config/archiver.json');
 
-// Returns a stream of the screenshot at url
-function streamScreenshot(site) {
-  var options = Object.assign({}, webshotOptions);
-  if (site.userAgent) {
-    options.userAgent = site.userAgent;
-  }
-  return webshot(site.url, options);
-}
 
 // Wrap the streaming snapshot + GCS write into a promise
 async function processSite (site) {
-  const destStream = await streamFile(site.filePath);
+  const destStream = await gcs.stream(site.filePath);
   return new Promise((resolve, reject) => {
-    const stream = streamScreenshot(site)
-      .on('error', (err) => reject(err));
-    stream.pipe(mozjpeg({quality: 50}))
+    snap.stream(site)
       .on('error', (err) => reject(err))
       .pipe(destStream)
       .on('finish', () => resolve())
@@ -34,22 +24,8 @@ async function processSite (site) {
   });
 }
 
-// Global vars
-// TODO: "recurring" is just a placeholder for "testing" - in that case we
-// shouldn't write the manifest, and should write it to a local file.
-// In fact, it's kinda a different thing altogether....
-var recurring = true;
+// Global
 var nextJob;
-
-// if any sites are passed along on the command line, extract those and filter
-// the sites list
-const requestedSites = process.argv.slice(2);
-var sites = config.sites;
-if (requestedSites.length > 0) {
-  sites = sites.filter(site => requestedSites.includes(site.shortName));
-  console.log(`Running in single mode - sites: ${requestedSites}`);
-  recurring = false
-}
 
 async function processAll () {
   const now = moment().utc();
@@ -72,8 +48,8 @@ async function processAll () {
   };
 
   // Process each site
-  for (const i in sites) {
-    const site = sites[i];
+  for (const i in config.sites) {
+    const site = config.sites[i];
     try {
       console.log(site.name);
       site.filePath = join(dstFolder, `${ts}-${site.shortName}.jpg`);
@@ -84,20 +60,16 @@ async function processAll () {
     }
   }
 
-  if (recurring) {
-    // Write manifests only if we're in full / normal mode
-
-    const manifestPath = join(dstFolder, 'manifest.json');
-    const latestPath = 'latest.json';
-
-    try {
-      console.log('manifest.json');
-      await writeJSON(manifestPath, manifestData);
-      console.log('latest.json');
-      await writeJSON(latestPath, manifestData);
-    } catch (e) {
-      console.log(`ERROR: could not write manifest to ${manifestPath} - ${e.message}`)
-    }
+  // Write manifests
+  const manifestPath = join(dstFolder, 'manifest.json');
+  const latestPath = 'latest.json';
+  try {
+    console.log('manifest.json');
+    await gcs.writeJSON(manifestPath, manifestData);
+    console.log('latest.json');
+    await gcs.writeJSON(latestPath, manifestData);
+  } catch (e) {
+    console.log(`ERROR: could not write manifest to ${manifestPath} - ${e.message}`)
   }
   console.log(`Finished archiving at ${moment().utc().toString()}`);
 
@@ -125,15 +97,13 @@ processAll().then(() => {
      to just have the scheduled event push tasks into the queue. I'm not sure
      that's worth it at any expected scale for this app though -db.
   */
-  if (recurring) {
-    nextJob = schedule.scheduleJob(`0 0 */${config.frequency} * * *`, () => {
-      processAll();
-    });
-  }
+  nextJob = schedule.scheduleJob(`0 0 */${config.frequency} * * *`, () => {
+    processAll();
+  });
 
   if (nextJob) {
     console.log(`Next run scheduled for ${nextJob.nextInvocation().toString()}`);
-  } else if (recurring) {
+  } else {
     throw new Error('Failed to schedule next Job (nextjob == false).');
   }
 });
