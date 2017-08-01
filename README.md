@@ -53,8 +53,6 @@ to production / local development. I dunno.
 
 ### Single-site archiving (mostly for testing)
 
-Just pass the short names of the sites you want to archive on the command line.
-This will archive ONLY those sites, and skip the recurring scheduling. WIP.
-Hacky.
+`node archiver/util/archive-single.js foxnews`
 
-`node archiver/src/index.js cnn foxnews thehill`
+Pass the short name of the site you want to archive as the script's single argument.
