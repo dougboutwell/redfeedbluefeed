@@ -4,7 +4,8 @@ const phantomjs = require('phantomjs-prebuilt');
 const webshot = require('webshot');
 
 var options = require('../config/webshot.json');
-options = Object.assign(options, { phantomPath: phantomjs.path });
+
+options.phantomPath = phantomjs.path;
 
 // Returns a stream of the screenshot at url
 function createScreenshotStream (site) {
@@ -14,8 +15,6 @@ function createScreenshotStream (site) {
   if (site.userAgent) {
     options.userAgent = site.userAgent;
   }
-
-  console.log(options);
 
   return multipipe(webshot(site.url, options), mozjpeg({quality: 50}));
 }

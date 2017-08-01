@@ -3,7 +3,7 @@ const { join } = require('path');
 const mkdirp = require('mkdirp');
 
 const snap = require('../src/snapshot');
-const config = require('../config/archiver.json');
+const sites = require('../config/sites');
 
 if (process.argv.length < 3) {
   console.log('Must specify at least one site on the command line');
@@ -12,7 +12,7 @@ if (process.argv.length < 3) {
 
 // Grab requested site from command line
 const requestedSite = process.argv[2];
-const site = config.sites.filter(site => requestedSite.includes(site.shortName))[0];
+const site = sites.filter(site => requestedSite.includes(site.shortName))[0];
 if (!site) {
   console.log(`No known sites match ${requestedSite}`);
   process.exit(1);

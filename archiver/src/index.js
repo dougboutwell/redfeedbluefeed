@@ -9,8 +9,8 @@ const snap = require('./snapshot.js');
 
 // Config
 // TODO: Validate this against the expected schema.
-var config = require('../config/archiver.json');
-
+const config = require('../config/archiver.json');
+const sites = require('../config/sites');
 
 // Wrap the streaming snapshot + GCS write into a promise
 async function processSite (site) {
@@ -48,8 +48,8 @@ async function processAll () {
   };
 
   // Process each site
-  for (const i in config.sites) {
-    const site = config.sites[i];
+  for (const i in sites) {
+    const site = sites[i];
     try {
       console.log(site.name);
       site.filePath = join(dstFolder, `${ts}-${site.shortName}.jpg`);
