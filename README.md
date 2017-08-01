@@ -3,6 +3,8 @@
 Web service for aggregating, archiving and comparing headlines from major new
 websites.
 
+[redfeedbluefeed.com](http://redfeedbluefeed.com)
+
 This was a fun weekend hackathon project for me, but there are a number of ways
 this can improve and grow if there's enough interest. See GitHub Issues for
 To-Dos and notes to future self.
