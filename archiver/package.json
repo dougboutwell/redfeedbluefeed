@@ -27,6 +27,7 @@
     "mozjpeg-stream": "^1.0.3",
     "multipipe": "^1.0.2",
     "node-schedule": "^1.2.3",
+    "phantomjs-prebuilt": "^2.1.14",
     "webshot": "^0.18.0"
   }
 }

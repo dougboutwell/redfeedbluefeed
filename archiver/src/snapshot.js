@@ -1,14 +1,22 @@
 const mozjpeg = require('mozjpeg-stream');
 const multipipe = require('multipipe');
+const phantomjs = require('phantomjs-prebuilt');
 const webshot = require('webshot');
-const webshotOptions = require('../config/webshot.json');
+
+var options = require('../config/webshot.json');
+options = Object.assign(options, { phantomPath: phantomjs.path });
 
 // Returns a stream of the screenshot at url
 function createScreenshotStream (site) {
-  var options = Object.assign({}, webshotOptions);
+  if (site.webshotOptions) {
+    options = Object.assign(options, site.webshotOptions);
+  }
   if (site.userAgent) {
     options.userAgent = site.userAgent;
   }
+
+  console.log(options);
+
   return multipipe(webshot(site.url, options), mozjpeg({quality: 50}));
 }
 
