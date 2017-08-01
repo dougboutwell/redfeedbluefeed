@@ -19,7 +19,17 @@ const sites = [
     name: "MSNBC",
     url: "http://msnbc.com",
     shortName: "msnbc",
-    bias: -2
+    bias: -2,
+    webshotOptions: {
+      onLoadFinished: function () {
+        var ads = document.querySelectorAll('[id^="google_ads"]');
+
+        for (var i = 0; i < ads.length; i++) {
+          var ad = ads[i];
+          ad.parentElement.removeChild(ad);
+        }
+      }
+    }
   }, {
     name: "Washington Post",
     url: "http://washingtonpost.com",
