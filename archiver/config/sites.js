@@ -112,7 +112,7 @@ const sites = [
     webshotOptions: {
       onLoadFinished: function () {
         // Remove multimedia / audio stuff. Thankfully NYTimes has jQuery
-        $('.sfg-li:has(iframe)').remove()
+        $('.sfg-li:has(iframe)').remove();
 
         function removeAllWithSelector (sel) {
           var ads = document.querySelectorAll(sel);
@@ -150,7 +150,14 @@ const sites = [
     name: "Politico",
     url: "http://politico.com",
     shortName: "politico",
-    bias: 0
+    bias: 0,
+    webshotOptions: {
+      onLoadFinished: function () {
+        // Remove ads
+        $('.super:has(.ad)').remove();
+      },
+      customCSS: '.global-announce, .super-header { display: none !important; }',
+    }
   }, {
     name: "The Hill",
     url: "http://thehill.com",
