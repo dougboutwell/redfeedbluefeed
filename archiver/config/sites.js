@@ -175,7 +175,10 @@ const sites = [
     name: "Wall Street Journal",
     url: "http://wsj.com",
     shortName: "wsj",
-    bias: 0
+    bias: 0,
+    webshotOptions: {
+      customCSS: '.wsj-ad { display: none !important; }',
+    }
   }, {
     name: "Associated Press",
     url: "http://apnews.com",
