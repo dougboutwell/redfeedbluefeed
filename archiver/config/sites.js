@@ -183,7 +183,15 @@ const sites = [
     name: "Associated Press",
     url: "http://apnews.com",
     shortName: "ap",
-    bias: 0
+    bias: 0,
+    webshotOptions: {
+      customCSS: '.inlineFeedAd, .ad { display: none !important; }',
+      userAgent: 'Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19',
+      onLoadFinished: function () {
+        $('.cardContainer:has(iframe)').remove();
+        $('.ntv-mw').remove();
+      }
+    }
   }, {
     name: "BBC News",
     url: "http://bbc.com/news/",
