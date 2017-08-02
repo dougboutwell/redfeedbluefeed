@@ -248,10 +248,13 @@ const sites = [
           }
         }
 
+        // Scroll 5000px down before screenshot
         scrollToY(5000, function () {
           window.callPhantom('takeShot');
         });
 
+        // But take the shot anyway after 10 seconds, because in PhantomJS, it
+        // seems like the above function sometimes never terminates.
         setTimeout(function () {
           window.callPhantom('takeShot');
         }, 10000);
