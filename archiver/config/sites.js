@@ -184,6 +184,15 @@ const sites = [
     shortName: "bbc",
     bias: 0
   }, {
+    name: "The Daily Caller",
+    url: "http://dailycaller.com",
+    shortName: "dailycaller",
+    bias: 1,
+    webshotOptions: {
+      userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_0_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12A366 Safari/600.1.4',
+      customCSS: '.topad, #masthead, #capture_lightbox_active { display: none !important; }',
+    }
+  }, {
     name: "NewsMax",
     url: "http://newsmax.com",
     shortName: "newsmax",
@@ -218,11 +227,6 @@ const sites = [
 
 const sitesNonWorking = [
   {
-    name: "The Daily Caller",
-    url: "http://dailycaller.com",
-    shortName: "dailycaller",
-    bias: 1
-  }, {
     name: "The Economist",
     url: "http://economist.com",
     shortName: "economist",
