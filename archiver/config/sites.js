@@ -162,7 +162,10 @@ const sites = [
     name: "The Hill",
     url: "http://thehill.com",
     shortName: "thehill",
-    bias: 0
+    bias: 0,
+    webshotOptions: {
+      customCSS: '.OUTBRAIN, .block-dfp { display: none !important; }',
+    }
   }, {
     name: "CNN",
     url: "http://cnn.com",
