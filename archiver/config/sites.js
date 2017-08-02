@@ -27,14 +27,7 @@ const sites = [
     shortName: "msnbc",
     bias: -2,
     webshotOptions: {
-      onLoadFinished: function () {
-        var ads = document.querySelectorAll('[id^="google_ads"]');
-
-        for (var i = 0; i < ads.length; i++) {
-          var ad = ads[i];
-          ad.parentElement.removeChild(ad);
-        }
-      }
+      customCSS: '[id^="google_ads"] { display: none !important }'
     }
   }, {
     name: "Washington Post",
