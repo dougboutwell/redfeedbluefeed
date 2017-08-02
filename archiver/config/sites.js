@@ -1,10 +1,16 @@
 /* eslint-disable no-undef */
+
 const sites = [
   {
     name: "Daily Kos",
     url: "http://dailykos.com",
     shortName: "dailykos",
-    bias: -2
+    bias: -2,
+    webshotOptions: {
+      onLoadFinished: function () {
+      },
+      customCSS: '.mobile-ad, .mobile-petition-ad {display: none !important; }'
+    }
   }, {
     name: "Huffington Post",
     url: "http://m.huffpost.com",
