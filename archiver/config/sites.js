@@ -134,7 +134,10 @@ const sites = [
     name: "Reuters",
     url: "http://reuters.com",
     shortName: "reuters",
-    bias: 0
+    bias: 0,
+    webshotOptions: {
+      customCSS: '.mpu_ad { display: none !important }'
+    }
   }, {
     name: "USA Today",
     url: "http://usatoday.com",
