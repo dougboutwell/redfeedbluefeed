@@ -83,14 +83,15 @@ const sites = [
           toPin[i].style.width = '375px';
         }
         $('.advertisement').remove();
-
+        $('.plr-card').remove();
       },
-      // customCSS: '\
-      //   .card__image__src { position: relative; }\
-      //   .card__image { float: left; }\
-      //   .card__details { display: block; float: right; width: 70%; position: relative; }\
-      //   .card__content { display: block }'
-        
+      customCSS: '\
+        .card__image__src { position: relative; }\
+        .card__image { float: left; }\
+        .card__details { display: block; float: right; width: 70%; position: relative; }\
+        .card__content { display: block }'
+        // .card__content::after { clear: both; display: table; content: "" }'
+
     }
   }, {
     name: "Raw Story",
