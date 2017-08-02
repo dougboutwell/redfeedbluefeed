@@ -215,7 +215,10 @@ const sites = [
     name: "Fox News",
     url: "http://foxnews.com",
     shortName: "foxnews",
-    bias: 2
+    bias: 2,
+    webshotOptions: {
+      customCSS: '.advertisement, .ad { display: none !important; }',
+    }
   }, {
     name: "Red State",
     url: "http://redstate.com",
