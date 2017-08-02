@@ -53,6 +53,12 @@ const sites = [
         dkLoadToHeight(4000, function () {
           window.callPhantom('takeShot');
         });
+
+        // Just snap the damn shot after 20 seconds -- fallback
+        setTimeout(function () {
+          window.callPhantom('takeShot');
+        }, 20000);
+
       },
       customCSS: '.mobile-ad, .mobile-petition-ad { display: none !important; }'
     }

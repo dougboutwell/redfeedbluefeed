@@ -21,6 +21,11 @@ async function processSite (site) {
       .pipe(destStream)
       .on('finish', () => resolve())
       .on('error', (err) => reject(err));
+  })
+  .then(() => { return Promise.resolve(site); })
+  .catch((e) => {
+    console.log(`ERROR: failed processing ${site.name} - ${e.message}`);
+    return Promise.resolve(false);
   });
 }
 
@@ -50,13 +55,21 @@ async function processAll () {
   // Process each site
   for (const i in sites) {
     const site = sites[i];
-    try {
-      console.log(site.name);
-      site.filePath = join(dstFolder, `${ts}-${site.shortName}.jpg`);
-      await processSite(site);
-      manifestData.sites.push(site);
-    } catch (e) {
-      console.log(`ERROR: could not process ${site.name} - ${e.message}`);
+    console.log(site.name);
+    site.filePath = join(dstFolder, `${ts}-${site.shortName}.jpg`);
+
+    var maxRetries;
+    var retries = maxRetries = config.retries;
+    var result;
+    while (retries > 0) {
+      result = await processSite(site);
+      if (result) { break; }
+      else { retries--; }
+    }
+    if (result) {
+      manifestData.sites.push(result);
+    } else {
+      console.log(`ERROR: gave up processing ${site.name} after ${maxRetries} failed attempts`);
     }
   }
 
