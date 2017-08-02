@@ -102,7 +102,7 @@ const sites = [
   }, {
     name: "Washington Post",
     url: "http://washingtonpost.com",
-    shortName: "washingtonpost",
+    shortName: "wapo",
     bias: -1
   }, {
     name: "NY Times",
