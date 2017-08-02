@@ -265,7 +265,10 @@ const sites = [
     name: "Breitbart",
     url: "http://breitbart.com",
     shortName: "breitbart",
-    bias: 2
+    bias: 2,
+    webshotOptions: {
+      customCSS: '#cin_header, #BBStoreW { display: none !important; }',
+    }
   }, {
     name: "InfoWars",
     url: "http://infowars.com/news/",
