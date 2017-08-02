@@ -223,7 +223,41 @@ const sites = [
     name: "Red State",
     url: "http://redstate.com",
     shortName: "redstate",
-    bias: 2
+    bias: 2,
+    webshotOptions: {
+      screenSize: {
+        width: 375,
+        height: 667,
+      },
+      shotSize: {
+        width: "all",
+        height: 4000
+      },
+      userAgent: 'Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19',
+      takeShotOnCallback: true,
+      onLoadFinished: function () {
+        function scrollToY(y, cb) {
+          $('article:has(.ad)').remove();
+
+          console.log(window.scrollY);
+          if (window.scrollY < y) {
+            window.scrollBy(0, 50);
+            setTimeout(function () {
+              scrollToY(y, cb);
+            }, 50);
+          }
+        }
+
+        scrollToY(5000, function () {
+          window.callPhantom('takeShot');
+        });
+
+        setTimeout(function () {
+          window.callPhantom('takeShot');
+        }, 10000);
+      }
+    }
+
   }, {
     name: "Breitbart",
     url: "http://breitbart.com",
