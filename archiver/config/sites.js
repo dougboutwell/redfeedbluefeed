@@ -278,7 +278,21 @@ const sites = [
     name: "The Blaze",
     url: "http://theblaze.com",
     shortName: "theblaze",
-    bias: 2
+    bias: 2,
+    webshotOptions: {
+      customCSS: '.top-ad { display: none !important; }',
+      takeShotOnCallback: true,
+      onLoadFinished: function () {
+        $('.top-ad').remove();
+
+        // Load more - default isn't enough to fill 4k px height
+        $('#load_more_feeds').click()
+        
+        setTimeout(function () {
+          window.callPhantom('takeShot');
+        }, 10000);
+      }
+    }
   }
 ];
 
