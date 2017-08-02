@@ -142,7 +142,10 @@ const sites = [
     name: "USA Today",
     url: "http://usatoday.com",
     shortName: "usatoday",
-    bias: 0
+    bias: 0,
+    webshotOptions: {
+      customCSS: '.ad { display: none !important }'
+    }
   }, {
     name: "Politico",
     url: "http://politico.com",
