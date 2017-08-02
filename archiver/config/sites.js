@@ -54,7 +54,7 @@ const sites = [
           window.callPhantom('takeShot');
         });
       },
-      customCSS: '.mobile-ad, .mobile-petition-ad {display: none !important; }'
+      customCSS: '.mobile-ad, .mobile-petition-ad { display: none !important; }'
     }
   }, {
     name: "Huffington Post",
@@ -108,7 +108,28 @@ const sites = [
     name: "NY Times",
     url: "http://nytimes.com",
     shortName: "nytimes",
-    bias: -1
+    bias: -1,
+    webshotOptions: {
+      onLoadFinished: function () {
+        // Remove multimedia / audio stuff. Thankfully NYTimes has jQuery
+        $('.sfg-li:has(iframe)').remove()
+
+        function removeAllWithSelector (sel) {
+          var ads = document.querySelectorAll(sel);
+
+          for (var i = 0; i < ads.length; i++) {
+            var ad = ads[i];
+            ad.parentElement.removeChild(ad);
+          }
+        }
+
+        // Remove useless "Daily Briefing"
+        removeAllWithSelector('.sfg-li-briefing');
+
+        // Remove ads
+        removeAllWithSelector('.ad');
+      },
+    }
   }, {
     name: "Reuters",
     url: "http://reuters.com",
