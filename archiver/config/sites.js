@@ -7,7 +7,52 @@ const sites = [
     shortName: "dailykos",
     bias: -2,
     webshotOptions: {
+      takeShotOnCallback: true,
       onLoadFinished: function () {
+        function removeAllWithSelector (sel) {
+          var ads = document.querySelectorAll(sel);
+
+          for (var i = 0; i < ads.length; i++) {
+            var ad = ads[i];
+            ad.parentElement.removeChild(ad);
+          }
+        }
+
+        function removeAds () {
+          removeAllWithSelector('[id^="google_ads"]');
+          removeAllWithSelector('.mobile-ad');
+        }
+
+        function dkLoadToHeight(height, cb) {
+          removeAds();
+
+          var stories = document.querySelectorAll('.story');
+          var yMax = 0;
+          for (var s in stories) {
+            var story = stories[s];
+            if (typeof story !== 'object') continue;
+            var yStory = story.getBoundingClientRect().bottom;
+            if (yStory > yMax) {
+              yMax = yStory;
+            }
+          }
+
+          if (yMax < height) {
+            console.log('current page height: ' + yMax + ' - loading...');
+            BlogApp.Views.storyView.collection.loadStories();
+            setTimeout(function () {
+              dkLoadToHeight(height);
+            }, 2000);
+          } else {
+            cb();
+            console.log('current page height: ' + yMax + ' - Finished');
+          }
+        }
+
+        // Load 4000px of articles, then
+        dkLoadToHeight(4000, function () {
+          window.callPhantom('takeShot');
+        });
       },
       customCSS: '.mobile-ad, .mobile-petition-ad {display: none !important; }'
     }
