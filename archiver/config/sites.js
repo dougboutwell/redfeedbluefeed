@@ -60,7 +60,38 @@ const sites = [
     name: "Huffington Post",
     url: "http://m.huffpost.com",
     shortName: "huffingtonpost",
-    bias: -2
+    bias: -2,
+    webshotOptions: {
+      shotSize: {
+        width: 'window',
+        height: 4000
+      },
+      userAgent: 'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A293 Safari/6531.22.7',
+      onLoadFinished: function () {
+        // Huffpo is broken as fuck, because apparently PhantomJS has a borked
+        // flexbox implementation. This helps, but it's still broke. Images
+        // aren'tin the right places.
+
+        document.body.style.width = '375px';
+        var toPin = [];
+        toPin.push(document.body);
+        toPin = toPin.concat($('.header-container').get());
+        toPin = toPin.concat($('.zone').get());
+        toPin = toPin.concat($('.card').get());
+
+        for (var i in toPin) {
+          toPin[i].style.width = '375px';
+        }
+        $('.advertisement').remove();
+
+      },
+      // customCSS: '\
+      //   .card__image__src { position: relative; }\
+      //   .card__image { float: left; }\
+      //   .card__details { display: block; float: right; width: 70%; position: relative; }\
+      //   .card__content { display: block }'
+        
+    }
   }, {
     name: "Raw Story",
     url: "http://rawstory.com",
@@ -287,7 +318,7 @@ const sites = [
 
         // Load more - default isn't enough to fill 4k px height
         $('#load_more_feeds').click()
-        
+
         setTimeout(function () {
           window.callPhantom('takeShot');
         }, 10000);
