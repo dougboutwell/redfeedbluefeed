@@ -65,7 +65,32 @@ const sites = [
     name: "Raw Story",
     url: "http://rawstory.com",
     shortName: "rawstory",
-    bias: -2
+    bias: -2,
+    webshotOptions: {
+      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36',
+      takeShotOnCallback: true,
+      onLoadFinished: function () {
+        function removeAllWithSelector (sel) {
+          var ads = document.querySelectorAll(sel);
+
+          for (var i = 0; i < ads.length; i++) {
+            var ad = ads[i];
+            ad.parentElement.removeChild(ad);
+          }
+        }
+
+        function removeAds () {
+          removeAllWithSelector('.advertisement');
+          removeAllWithSelector('.footer-outer-wrapper');
+        }
+
+        // window.scrollTo(0, 4000);
+        setTimeout(function () {
+          removeAds();
+          window.callPhantom('takeShot');
+        }, 500);
+      }
+    }
   }, {
     name: "MSNBC",
     url: "http://msnbc.com",
