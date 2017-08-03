@@ -13,11 +13,12 @@ const config = require('../config/archiver.json');
 const sites = require('../config/sites');
 
 // Wrap the streaming snapshot + GCS write into a promise
-async function processSite (site) {
+async function processSite (site, force) {
   const destStream = await gcs.stream(site.filePath);
   return new Promise((resolve, reject) => {
-    snap.stream(site)
+    snap.stream(site, force)
       .on('error', (err) => reject(err))
+      .on('finish', () => { console.log(`Finished snapshot. Uploading.`);})
       .pipe(destStream)
       .on('finish', () => resolve())
       .on('error', (err) => reject(err));
@@ -62,7 +63,8 @@ async function processAll () {
     var retries = maxRetries = config.retries;
     var result;
     while (retries > 0) {
-      result = await processSite(site);
+      var force = retries == 1; // force if it's our last chance
+      result = await processSite(site, force);
       if (result) { break; }
       else { retries--; }
     }

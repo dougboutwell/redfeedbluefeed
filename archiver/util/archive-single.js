@@ -3,24 +3,45 @@ const { join } = require('path');
 const mkdirp = require('mkdirp');
 
 const snap = require('../src/snapshot');
-const sites = require('../config/sites');
-
-if (process.argv.length < 3) {
-  console.log('Must specify at least one site on the command line');
-  process.exit(2);
-}
+const allSites = require('../config/sites');
 
 // Grab requested site from command line
-const requestedSite = process.argv[2];
-const site = sites.filter(site => requestedSite.includes(site.shortName))[0];
-if (!site) {
-  console.log(`No known sites match ${requestedSite}`);
-  process.exit(1);
+const requestedSiteNames = process.argv.slice(2);
+var sites = [];
+if (requestedSiteNames.length > 0) {
+  sites = allSites.filter(site => requestedSiteNames.includes(site.shortName));
+  if (sites.length < 1) {
+    console.log(`No known sites match ${requestedSiteNames}`);
+    process.exit(1);
+  }
+} else {
+  sites = allSites;
 }
 
-const outDir = join(process.env.HOME, 'Desktop', 'redfeedbluefeed-tests');
-mkdirp.sync(outDir);
-const outPath = join(outDir, `${site.shortName}.jpg`);
-const destStream = fs.createWriteStream(outPath);
-console.log(`Generating snapshot of ${site.name} at ${outPath}`);
-snap.stream(site).pipe(destStream);
+async function archiveOne(site) {
+  return new Promise((resolve, reject) => {
+    const outDir = join(process.env.HOME, 'Desktop', 'redfeedbluefeed-tests');
+    mkdirp.sync(outDir);
+    const outPath = join(outDir, `${site.shortName}.jpg`);
+    const destStream = fs.createWriteStream(outPath);
+    console.log(`${site.name} => ${outPath}`);
+    snap.stream(site, false)
+      .on('error', (err) => reject(err))
+      .pipe(destStream)
+      .on('error', (err) => reject(err))
+      .on('finish', () => resolve());
+  });
+}
+
+async function archiveAll(sites) {
+  for (const i in sites) {
+    const s = sites[i];
+    try {
+      await archiveOne(s);
+    } catch (e) {
+      console.log(`ERROR: Could not archive ${s.name} - ${e.message}`);
+    }
+  }
+}
+
+archiveAll(sites);
