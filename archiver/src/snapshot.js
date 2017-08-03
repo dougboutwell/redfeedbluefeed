@@ -5,12 +5,15 @@ const multipipe = require('multipipe');
 const phantomjs = require('phantomjs-prebuilt');
 const webshot = require('webshot');
 
-var options = require('../config/webshot.json');
-
-options.phantomPath = phantomjs.path;
+const defaultOptions = require('../config/webshot.json');
 
 // Returns a stream of the screenshot at url
 function createScreenshotStream (site, force) {
+  var options = Object.assign({}, defaultOptions);
+
+  // Use phantomjs v2.x from the -prebuilt package
+  options.phantomPath = phantomjs.path;
+
   if (site.webshotOptions) {
     options = Object.assign(options, site.webshotOptions);
   }
@@ -53,7 +56,6 @@ function createScreenshotStream (site, force) {
       }, 30000);
     };
   }
-
 
   return multipipe(webshot(site.url, options), mozjpeg({quality: 60}));
 }
