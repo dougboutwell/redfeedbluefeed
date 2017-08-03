@@ -2,12 +2,14 @@ version: "3"
 
 services:
   archiver:
+    # build: archiver
     image: dougboutwell/redfeedbluefeed-archiver:latest
     volumes:
       - ./credentials:/home/app/archiver/credentials
       - ./archiver/config:/home/app/archiver/config
 
   site:
+    # build: site
     image: dougboutwell/redfeedbluefeed-site:latest
     ports:
       - "80:80"
