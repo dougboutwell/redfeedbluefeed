@@ -4,8 +4,8 @@ services:
   archiver:
     image: dougboutwell/redfeedbluefeed-archiver:latest
     volumes:
-      - ./credentials:/home/archiver/credentials
-      - ./archiver/config:/home/archiver/config
+      - ./credentials:/home/app/archiver/credentials
+      - ./archiver/config:/home/app/archiver/config
 
   site:
     image: dougboutwell/redfeedbluefeed-site:latest
