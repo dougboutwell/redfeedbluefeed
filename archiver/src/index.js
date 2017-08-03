@@ -18,7 +18,6 @@ async function processSite (site, force) {
   return new Promise((resolve, reject) => {
     snap.stream(site, force)
       .on('error', (err) => reject(err))
-      .on('finish', () => { console.log(`Finished snapshot. Uploading.`);})
       .pipe(destStream)
       .on('finish', () => resolve())
       .on('error', (err) => reject(err));
