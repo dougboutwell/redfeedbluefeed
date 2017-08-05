@@ -219,8 +219,13 @@ const sites = [
     shortName: "usatoday",
     bias: 0,
     webshotOptions: {
-      customCSS: '.ad { display: none !important }'
-    }
+      customCSS: '.ad, partner-banner,  { display: none !important }'
+    },
+    snapFn: function () {
+      setTimeout(function () {
+        window.callPhantom('takeShot');
+      }, 1000);
+    },
   },
 
   {
