@@ -1,8 +1,8 @@
-const config = require('../config/google-cloud.json');
-const gcs = require('@google-cloud/storage')(config);
+const config = require('config');
+const gcs = require('@google-cloud/storage')(config.get('gcs'));
 
 // singleton bucket object - init once.
-const bucket = gcs.bucket(config.bucketName);
+const bucket = gcs.bucket(config.get('gcs.bucketName'));
 
 const gcsOptions = {
   public: true,

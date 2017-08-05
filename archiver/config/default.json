@@ -1,0 +1,12 @@
+{
+  "archiver": {
+    "frequency": 2,
+    "retries": 3,
+    "minSize": 25000
+  },
+  "gcs": {
+    "projectId": "red-feed-blue-feed",
+    "keyFilename": "../credentials/gcs.json",
+    "bucketName": "redfeedbluefeed-snaps-mobile-2017"
+  }
+}

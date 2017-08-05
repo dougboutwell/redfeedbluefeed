@@ -9,8 +9,8 @@ const snap = require('./snapshot.js');
 
 // Config
 // TODO: Validate this against the expected schema.
-const config = require('../config/archiver.json');
-const sites = require('../config/sites');
+const config = require('config');
+const sites = require('./sites');
 
 
 async function validateUpload (site) {
@@ -25,10 +25,11 @@ async function validateUpload (site) {
      a full-screen video or something (which Phantom doesn't support).
      */
    const fileSize = metadata[0].size;
-   if (metadata[0].size > 25000) {
-     return Promise.resolve(fileSize);
-   } else {
+   const minSize = config.get('archiver.minSize');
+   if (fileSize < minSize) {
      return Promise.reject(new Error(`Size of saved snapshot was only ${fileSize}b`));
+   } else {
+     return Promise.resolve(fileSize);
    }
 }
 
@@ -62,7 +63,7 @@ async function processAll () {
 
   // Set the folder to the interval we're in. For instance, if run at 9:25am,
   // with freq = 4 hours, then the folder name is 08
-  const freq = config.frequency;
+  const freq = config.get('archiver.frequency');
   const folderHours = Math.floor(now.hour() / freq) * freq;
   const dateString = now.format('YYYY-MM-DD');
   const dstFolder = `${dateString}_${folderHours < 10 ? 0 : ''}${folderHours}`;
@@ -80,7 +81,7 @@ async function processAll () {
     site.filePath = join(dstFolder, `${ts}-${site.shortName}.jpg`);
 
     var maxRetries;
-    var retries = maxRetries = config.retries;
+    var retries = maxRetries = config.get('archiver.retries');
     var result;
     while (retries > 0) {
       var force = retries == 1; // force if it's our last chance
