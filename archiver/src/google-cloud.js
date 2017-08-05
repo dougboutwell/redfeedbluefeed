@@ -39,6 +39,11 @@ async function deleteFile (file) {
   return file.delete();
 }
 
+async function getMetadata (destPath) {
+  const file = bucket.file(destPath);
+  return file.getMetadata();
+}
+
 // Writes json data object to a file on GCS at dstPath
 async function writeJSON (dstPath, data) {
   const stream = await createGCSStream(dstPath);
@@ -53,5 +58,6 @@ async function writeJSON (dstPath, data) {
 
 module.exports = {
   stream: createGCSStream,
+  metadata: getMetadata,
   writeJSON
 };

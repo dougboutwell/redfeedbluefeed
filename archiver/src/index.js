@@ -12,6 +12,26 @@ const snap = require('./snapshot.js');
 const config = require('../config/archiver.json');
 const sites = require('../config/sites');
 
+
+async function validateUpload (site) {
+  const metadata = await gcs.metadata(site.filePath);
+
+  /* Require that a site's snapshot is > 25kb, or else assume it's broken. Yes,
+     this is pretty fragile, but the alternative is getting into CV stuff to
+     actually analyze the image, and that'll have to wait for another day.
+
+     The real-world issue this attempts to detect is snapshots that are mostly
+     blank / white, either because they failed to load, or they're covered by
+     a full-screen video or something (which Phantom doesn't support).
+     */
+   const fileSize = metadata[0].size;
+   if (metadata[0].size > 25000) {
+     return Promise.resolve(fileSize);
+   } else {
+     return Promise.reject(new Error(`Size of saved snapshot was only ${fileSize}b`));
+   }
+}
+
 // Wrap the streaming snapshot + GCS write into a promise
 async function processSite (site, force) {
   const destStream = await gcs.stream(site.filePath);
@@ -22,6 +42,7 @@ async function processSite (site, force) {
       .on('finish', () => resolve())
       .on('error', (err) => reject(err));
   })
+  .then(() => { return validateUpload(site); })
   .then(() => { return Promise.resolve(site); })
   .catch((e) => {
     console.log(`ERROR: failed processing ${site.name} - ${e.message}`);
