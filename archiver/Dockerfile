@@ -1,17 +1,20 @@
 FROM node:latest
 MAINTAINER Doug Boutwell "doug@dougboutwell.com"
 
-RUN useradd --user-group --create-home app
+# Install forever globally while we're still root
 RUN npm install forever -g
 
-USER app
-ENV HOME=/home/app
+# Use the prebuilt user from node image
+USER node
+ENV NODE_ENV=production
 
-RUN mkdir /home/app/archiver
-WORKDIR /home/app/archiver
+RUN mkdir /home/node/archiver
+WORKDIR /home/node/archiver
 
-COPY ./package.json /home/app/archiver/package.json
-RUN npm install --production
-COPY ./src /home/app/archiver/src
+# Install deps
+COPY ./package.json /home/node/archiver/package.json
+RUN ["npm", "install", "--production"]
+COPY ./src /home/node/archiver/src
 
-CMD forever -f src/index.js
+# Keep server alive with forever
+CMD ["forever", "-f", "src/index.js"]
