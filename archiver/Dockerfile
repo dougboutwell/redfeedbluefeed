@@ -1,9 +1,6 @@
 FROM node:latest
 MAINTAINER Doug Boutwell "doug@dougboutwell.com"
 
-# Install forever globally while we're still root
-RUN npm install forever -g
-
 # Use the prebuilt user from node image
 USER node
 ENV NODE_ENV=production
@@ -15,6 +12,7 @@ WORKDIR /home/node/archiver
 COPY ./package.json /home/node/archiver/package.json
 RUN ["npm", "install", "--production"]
 COPY ./src /home/node/archiver/src
+COPY ./config /home/node/archiver/config
 
 # Keep server alive with forever
-CMD ["forever", "-f", "src/index.js"]
+CMD ["node", "src/index.js"]

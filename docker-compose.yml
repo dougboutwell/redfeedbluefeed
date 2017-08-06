@@ -6,9 +6,11 @@ services:
     image: dougboutwell/redfeedbluefeed-archiver:latest
     volumes:
       - ./credentials:/home/app/archiver/credentials
+    restart: unless-stopped
 
   site:
     build: site
     image: dougboutwell/redfeedbluefeed-site:latest
     ports:
       - "80:80"
+    restart: unless-stopped
