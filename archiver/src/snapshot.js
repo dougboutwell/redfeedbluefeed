@@ -6,22 +6,20 @@ const phantomjs = require('phantomjs-prebuilt');
 const webshot = require('webshot');
 
 const defaultOptions = {
-  webshot: {
-    screenSize: {
-      width: 375,
-      height: 4000
-    },
-    shotSize: {
-      width: "all",
-      height: "window"
-    },
-    quality: 100,
-    defaultWhiteBackground: true,
-    streamType: "jpg",
-    timeout: 90000,
-    renderDelay: 500,
-    userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 6_1_4 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10B350 Safari/8536.25"
-  }
+  screenSize: {
+    width: 375,
+    height: 4000
+  },
+  shotSize: {
+    width: "all",
+    height: "window"
+  },
+  quality: 100,
+  defaultWhiteBackground: true,
+  streamType: "jpg",
+  timeout: 90000,
+  renderDelay: 500,
+  userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 6_1_4 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10B350 Safari/8536.25"
 }
 
 // Returns a stream of the screenshot at url
