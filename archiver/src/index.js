@@ -133,7 +133,7 @@ processAll().then(() => {
      to just have the scheduled event push tasks into the queue. I'm not sure
      that's worth it at any expected scale for this app though -db.
   */
-  nextJob = schedule.scheduleJob(`0 0 */${config.frequency} * * *`, () => {
+  nextJob = schedule.scheduleJob(`0 0 */${config.get('archiver.frequency')} * * *`, () => {
     processAll();
   });
 
