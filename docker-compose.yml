@@ -2,14 +2,16 @@ version: "3"
 
 services:
   archiver:
-    build: archiver
+    # No, really - build is not a good idea here. It's inappropriate for a
+    # production environment. Stop doing this, you dumbfuck.
+    # build: archiver
     image: dougboutwell/redfeedbluefeed-archiver:latest
     volumes:
-      - ./credentials:/home/app/archiver/credentials
+      - ./credentials:/home/node/credentials
     restart: unless-stopped
 
   site:
-    build: site
+    # build: site
     image: dougboutwell/redfeedbluefeed-site:latest
     ports:
       - "80:80"
