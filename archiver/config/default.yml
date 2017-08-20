@@ -2,6 +2,10 @@ archiver:
   frequency: 2
   retries: 3
   minSize: 25000
+  fileNames:
+    catalog: catalog.json
+    latest: latest.json
+    manifest: manifest.json
 gcs:
   projectId: red-feed-blue-feed
   keyFilename: ../credentials/gcs.json

@@ -1,3 +1,4 @@
+const moment = require('moment');
 const config = require('config');
 const gcs = require('@google-cloud/storage')(config.get('gcs'));
 
@@ -15,6 +16,7 @@ const gcsOptions = {
   }
 };
 
+// create a writable stream for a file at destPath
 async function createGCSStream (destPath) {
   const file = bucket.file(destPath);
   if (await fileExists(file)) {
@@ -35,10 +37,68 @@ async function fileExists (file) {
   })
 }
 
+// get list of the available screenshot folders
+async function folderList () {
+  return bucket.getFiles({
+    // TODO: changing frequency may break this?
+    maxResults: 365 * 24 / config.get('archiver.frequency'),
+    delimiter: '/',
+  }).then((data) => {
+    const response = data[2];
+    return response.prefixes.map(val => val.replace(/\//, ''));
+  });
+}
+
+// fetch a file from the current bucket
+async function readFile (fileName, encoding = 'utf8') {
+  return new Promise((resolve, reject) => {
+    var data = '';
+    bucket.file(fileName).createReadStream()
+      .setEncoding(encoding)
+      .on('data', chunk => data += chunk)
+      .on('error', err => reject(err))
+      .on('end', () => resolve(data));
+  });
+}
+
+// generate a fresh catalog.json file
+async function generateCatalog (options = {writeFile: true}) {
+  var data = {};
+  data.timeStamp = moment().utc().toISOString();
+  data.folderNames = await folderList();
+
+  if (options.writeFile) {
+    const fileName = config.get('archiver.fileNames.catalog');
+    await writeJSON(fileName, data);
+  }
+  return data;
+}
+
+// add one name to folderNames in catalog.json + update timestamp
+async function addToCatalog (folderName) {
+  const fileName = config.get('archiver.fileNames.catalog');
+  var data;
+  try {
+    data = JSON.parse(await readFile(fileName));
+    if (!data.folderNames || data.folderNames.length < 1) {
+      throw new Error('folderNames array is empty')
+    }
+  } catch (err) {
+    console.log(`ERROR: could not read existing catalog. Regenerating (${err})`);
+    data = await generateCatalog({writeFile: false});
+  }
+  data.timeStamp = moment().utc().toISOString();
+  data.folderNames.push(folderName);
+
+  await writeJSON(fileName, data);
+}
+
+// delete a file
 async function deleteFile (file) {
   return file.delete();
 }
 
+// fetch file metadata
 async function getMetadata (destPath) {
   const file = bucket.file(destPath);
   return file.getMetadata();
@@ -57,7 +117,8 @@ async function writeJSON (dstPath, data) {
 }
 
 module.exports = {
+  addToCatalog,
   stream: createGCSStream,
   metadata: getMetadata,
-  writeJSON
+  writeJSON,
 };

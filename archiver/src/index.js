@@ -12,7 +12,6 @@ const snap = require('./snapshot.js');
 const config = require('config');
 const sites = require('./sites');
 
-
 async function validateUpload (site) {
   const metadata = await gcs.metadata(site.filePath);
 
@@ -104,6 +103,8 @@ async function processAll () {
     await gcs.writeJSON(manifestPath, manifestData);
     console.log('latest.json');
     await gcs.writeJSON(latestPath, manifestData);
+    console.log('updating catalog.json');
+    await gcs.addToCatalog(dstFolder);
   } catch (e) {
     console.log(`ERROR: could not write manifest to ${manifestPath} - ${e.message}`)
   }
