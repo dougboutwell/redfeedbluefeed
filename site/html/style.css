@@ -64,7 +64,7 @@ html {
 }
 
 body {
-	padding: 50px 0;
+	padding: 50px 0 0;
 }
 
 h1 {
@@ -103,13 +103,13 @@ hr {
 
 .scrollContainer {
   width: 100%;
-  padding: 0 50px;
   overflow-x: scroll;
   overflow-y: visible;
 }
 
 .sites {
-  display: flex;
+  display: inline-flex;
+	padding: 0 50px 50px;
 }
 
 .site {
