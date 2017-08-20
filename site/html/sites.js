@@ -31,7 +31,9 @@ $.ajax(latestURL, {cache: false})
       console.log(bias);
       $('.sites').append(' \
       <li class="site">\
-        <div class="siteTitle ' + bias + '">' + site.name + '</div>\
+        <a href="' + site.url + '" title="' + site.name + '" target="_blank">\
+          <div class="siteTitle ' + bias + '">' + site.name + '</div>\
+        </a>\
         <img src=' + imgURL + ' class="siteImage"> \
       </li> \
       ');
