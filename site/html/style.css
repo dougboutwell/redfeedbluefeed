@@ -109,6 +109,7 @@ hr {
   width: 100%;
   overflow-x: scroll;
   overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
 }
 
 .sites {
