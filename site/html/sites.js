@@ -1,5 +1,6 @@
 var baseURL = 'http://storage.googleapis.com/redfeedbluefeed-snaps-mobile-2017/';
 var latestURL = baseURL + 'latest.json';
+var catalogURL = baseURL + 'catalog.json';
 
 const biasClasses = {
   '-2': 'bias-1',
@@ -47,4 +48,18 @@ $.ajax(latestURL, {cache: false})
     }
 
     centerInViewport('.site:nth-child(' + Math.floor(sites.length / 2) + ')', '.scrollContainer');
+  });
+
+$.ajax(catalogURL, {cache: false})
+  .done(function (data) {
+    data = JSON.parse(data);
+
+    var availableDates = [];
+    for (var i = 0; i < data.folderNames.length; i++) {
+      var folderName = data.folderNames[i];
+      var pieces = folderName.split('_');
+      var folderDate = moment(pieces[0]);
+      folderDate.hour(pieces[1]);
+      availableDates.push(folderDate);
+    }
   });
