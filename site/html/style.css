@@ -49,6 +49,10 @@ table {
 
 /* The acutal site */
 
+@-ms-viewport{
+  width: device-width;
+}
+
 html {
   box-sizing: border-box;
 }
@@ -120,9 +124,10 @@ hr {
 }
 
 .site {
-  margin: 10px;
+	margin: 1.5vw;
   box-shadow: 0 6px 15px 3px rgba(0, 0, 0, 0.3);
-  width: 270px;
+	width: 75vw;
+  max-width: 320px;
   height: auto;
   flex-shrink: 0;
   /*transform-origin: 50% 0%;
