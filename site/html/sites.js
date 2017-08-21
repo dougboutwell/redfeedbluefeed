@@ -36,7 +36,6 @@ $.ajax(latestURL, {cache: false})
       var site = sites[i];
       var imgURL = baseURL + site.filePath;
       var bias = biasClasses[site.bias] || 'bias-3';
-      console.log(bias);
       $('.sites').append(' \
       <li class="site">\
         <a href="' + site.url + '" title="' + site.name + '" target="_blank">\
