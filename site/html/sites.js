@@ -9,11 +9,18 @@ const biasClasses = {
   '2':  'bias-5'
 };
 
+// Scroll horizontally to center the element referenced by sel in containerSel
+function centerInViewport(sel, containerSel) {
+  var el = $(sel);
+  var container = $(containerSel);
+  var dx = container.width() - el.width()
+  var x = el.offset().left - (dx / 2);
+  container.scrollLeft(x);
+}
+
 $.ajax(latestURL, {cache: false})
   .done(function (data) {
     data = JSON.parse(data);
-    console.log(data);
-
     var timestamp = moment(data.timestamp);
 
     $('.timestamp').html(timestamp.toString());
@@ -38,4 +45,6 @@ $.ajax(latestURL, {cache: false})
       </li> \
       ');
     }
+
+    centerInViewport('.site:nth-child(' + Math.floor(sites.length / 2) + ')', '.scrollContainer');
   });
