@@ -128,6 +128,13 @@ hr {
   transition: transform 0.3s ease;*/
 }
 
+@media screen and (min-width: 800px) {
+  /* constrain margin growth for desktop-sized windows */
+  .site {
+    margin: 12px
+  }
+}
+
 /*.site:hover {
   transform: scale(1.15);
 }*/
