@@ -98,20 +98,6 @@ hr {
   text-align: center;
 }
 
-.disclaimer {
-  background-color: #f00;
-  height: 30px;
-  color: #fff;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  font-size: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .scrollContainer {
   width: 100%;
   overflow-x: scroll;
