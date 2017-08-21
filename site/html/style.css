@@ -67,10 +67,6 @@ html {
   text-align: center;
 }
 
-body {
-  padding: 50px 0 0;
-}
-
 a:link,
 a:visited,
 a:active {
@@ -93,9 +89,20 @@ hr {
   display: block;
 }
 
-.timestamp {
+.header {
   font-size: 14px;
+  padding: 10px 0;
   text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  background-color: #000;
+  color: #fff;
+}
+
+.header p {
+  line-height: 18px;
 }
 
 .scrollContainer {
