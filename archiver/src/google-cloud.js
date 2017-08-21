@@ -88,7 +88,9 @@ async function addToCatalog (folderName) {
     data = await generateCatalog({writeFile: false});
   }
   data.timeStamp = moment().utc().toISOString();
-  data.folderNames.push(folderName);
+  if (!data.folderNames.includes(folderName)) {
+    data.folderNames.push(folderName);
+  }
 
   await writeJSON(fileName, data);
 }
