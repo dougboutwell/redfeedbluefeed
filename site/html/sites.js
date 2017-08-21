@@ -23,7 +23,7 @@ $.ajax(latestURL, {cache: false})
     data = JSON.parse(data);
     var timestamp = moment(data.timestamp);
 
-    $('.timestamp').html(timestamp.toString());
+    $('.timestamp').html(timestamp.format('LLLL'));
 
     var sites = data.sites.sort(function (a, b) {
       if (a.bias < b.bias) { return -1; }
