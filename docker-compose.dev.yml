@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  archiver:
+    build: archiver
+    restart: "no"
+    environment:
+      - NODE_ENV=dev
+
+  site:
+    build: site
+    restart: "no"
+    environment:
+      - NODE_ENV=dev
