@@ -16,35 +16,35 @@ article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
-	display: block;
+  display: block;
 }
 body {
-	line-height: 1;
+  line-height: 1;
 }
 ol, ul {
-	list-style: none;
+  list-style: none;
 }
 blockquote, q {
-	quotes: none;
+  quotes: none;
 }
 blockquote:before, blockquote:after,
 q:before, q:after {
-	content: '';
-	content: none;
+  content: '';
+  content: none;
 }
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 /* The acutal site */
@@ -68,25 +68,25 @@ html {
 }
 
 body {
-	padding: 50px 0 0;
+  padding: 50px 0 0;
 }
 
 a:link,
 a:visited,
 a:active {
-	color: inherit;
-	text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 h1 {
   text-align: center;
   font-size: 30px;
-	margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 hr {
   width: 50%;
-	margin: 40px auto;
+  margin: 40px auto;
   height: 1px;
   background-color: #ccc;
   border: 0;
@@ -99,17 +99,17 @@ hr {
 }
 
 .disclaimer {
-	background-color: #f00;
-	height: 30px;
-	color: #fff;
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	font-size: 12px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  background-color: #f00;
+  height: 30px;
+  color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .scrollContainer {
@@ -120,13 +120,13 @@ hr {
 
 .sites {
   display: inline-flex;
-	padding: 0 50px 50px;
+  padding: 0 50px 50px;
 }
 
 .site {
-	margin: 1.5vw;
+  margin: 1.5vw;
   box-shadow: 0 6px 15px 3px rgba(0, 0, 0, 0.3);
-	width: 75vw;
+  width: 75vw;
   max-width: 320px;
   height: auto;
   flex-shrink: 0;
@@ -144,13 +144,13 @@ hr {
 }
 
 .siteTitle {
-	height: 60px;
-	color: #fff;
-	text-align: center;
-	font-size: 16px;
-	display: flex;
+  height: 60px;
+  color: #fff;
+  text-align: center;
+  font-size: 16px;
+  display: flex;
   justify-content: center;
-	align-items: center;
+  align-items: center;
 }
 
 .bias-1 { background-color: #3151c9; }
