@@ -3,7 +3,7 @@ const { join } = require('path');
 const mkdirp = require('mkdirp');
 
 const snap = require('../src/snapshot');
-const allSites = require('../config/sites');
+const allSites = require('../src/sites');
 
 // Grab requested site from command line
 const requestedSiteNames = process.argv.slice(2);
