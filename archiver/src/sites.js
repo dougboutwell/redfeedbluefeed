@@ -166,6 +166,16 @@ const sites = [
   },
 
   {
+    name: "The Guardian",
+    url: "http://theguardian.com/us",
+    shortName: "guardian",
+    bias: -1,
+    webshotOptions: {
+      customCSS: '.ad-slot { display: none !important }'
+    }
+  },
+
+  {
     name: "NY Times",
     url: "http://nytimes.com",
     shortName: "nytimes",
