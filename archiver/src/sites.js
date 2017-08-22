@@ -260,7 +260,15 @@ const sites = [
     bias: 0,
     webshotOptions: {
       customCSS: '.OUTBRAIN, .block-dfp { display: none !important; }',
-    }
+    },
+    snapFn: function () {
+      var ads = document.querySelectorAll('.OUTBRAIN');
+      for (var i in ads) {
+        try { ads[i].parentNode.removeChild(ads[i]) }
+        catch (e) { continue }
+      }
+      window.callPhantom('takeShot');
+    },
   },
 
   {
@@ -276,7 +284,7 @@ const sites = [
     shortName: "wsj",
     bias: 0,
     webshotOptions: {
-      customCSS: '.wsj-ad { display: none !important; }',
+      customCSS: '.wsj-ad, .mktg-tile-wrapper { display: none !important; }',
     }
   },
 
