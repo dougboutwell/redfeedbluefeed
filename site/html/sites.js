@@ -142,8 +142,16 @@ function updateCatalog () {
         },
       });
 
-      $('#foo').click(function(){
-        $('#datetimepicker').datetimepicker('toggle'); //support hide,show and destroy command
+      rfbf.showingCalendar = false;
+
+      $('#calendar').click(function(){
+        if (rfbf.showingCalendar) {
+          $('#datetimepicker').datetimepicker('hide');
+          rfbf.showingCalendar = false;
+        } else {
+          $('#datetimepicker').datetimepicker('show');
+          rfbf.showingCalendar = true;
+        }
       });
     }
   );
