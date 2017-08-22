@@ -336,6 +336,37 @@ const sites = [
     bias: 2,
     webshotOptions: {
       customCSS: '.advertisement, .ad { display: none !important; }',
+    },
+    snapFn: function () {
+      function scrollToY(y, lastY, cb) {
+        if (typeof lastY === 'function') {
+          cb = lastY;
+          lastY = window.scrollY;
+        }
+        var body = document.body;
+        var html = document.documentElement;
+        var docHeight = Math.max( body.scrollHeight, body.offsetHeight,
+                               html.clientHeight, html.scrollHeight,
+                               html.offsetHeight );
+        var maxYScroll = docHeight - window.innerHeight;
+
+        console.log(window.scrollY);
+        if (window.scrollY < Math.min(y, maxYScroll) && y !== lastY) {
+          window.scrollBy(0, 50);
+          // This looks recursive, but it ain't, as each iteration returns
+          // after queueing up the next call on the event loop.
+          setTimeout(function () {
+            scrollToY(y, lastY, cb);
+          }, 50);
+        } else {
+          cb();
+        }
+      }
+
+      // Scroll 5000px down before screenshot
+      scrollToY(5000, function () {
+        window.callPhantom('takeShot');
+      });
     }
   },
 
@@ -356,18 +387,30 @@ const sites = [
       userAgent: 'Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19',
     },
     snapFn: function () {
-      function scrollToY(y, cb) {
-        $('article:has(.ad)').remove();
+      function scrollToY(y, lastY, cb) {
+        if (typeof lastY === 'function') {
+          cb = lastY;
+          lastY = window.scrollY;
+        }
+        var body = document.body;
+        var html = document.documentElement;
+        var docHeight = Math.max( body.scrollHeight, body.offsetHeight,
+                               html.clientHeight, html.scrollHeight,
+                               html.offsetHeight );
+        var maxYScroll = docHeight - window.innerHeight;
 
         console.log(window.scrollY);
-        if (window.scrollY < y) {
+        if (window.scrollY < Math.min(y, maxYScroll) && y !== lastY) {
           window.scrollBy(0, 50);
+          // This looks recursive, but it ain't, as each iteration returns
+          // after queueing up the next call on the event loop.
           setTimeout(function () {
-            scrollToY(y, cb);
+            scrollToY(y, lastY, cb);
           }, 50);
+        } else {
+          cb();
         }
       }
-
       // Scroll 5000px down before screenshot
       scrollToY(5000, function () {
         window.callPhantom('takeShot');
