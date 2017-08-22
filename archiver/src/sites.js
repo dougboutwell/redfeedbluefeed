@@ -385,6 +385,16 @@ const sites = [
   },
 
   {
+    name: "National Review",
+    url: "http://nationalreview.com",
+    shortName: "nro",
+    bias: 2,
+    webshotOptions: {
+      customCSS: '.ntv-box, .donate-newsletter, .nr-newsletter { display: none !important; }',
+    }
+  },
+
+  {
     name: "InfoWars",
     url: "http://infowars.com/news/",
     shortName: "infowars",
