@@ -20,18 +20,18 @@ if (/localhost/.test(location.hostname) && 0) {
 
 // Always a handy snippet...
 // https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
-function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
+function getParameterByName (name, url) {
+  if (!url) url = window.location.href;
+  name = name.replace(/[[]]/g, '\\$&');
+  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
+  var results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
 // Scroll horizontally to center the element referenced by sel in containerSel
-function centerInViewport(sel, containerSel) {
+function centerInViewport (sel, containerSel) {
   var el = $(sel);
   var container = $(containerSel);
   var dx = container.width() - el.width()
@@ -39,7 +39,7 @@ function centerInViewport(sel, containerSel) {
   container.scrollLeft(x);
 }
 
-function updateImages(folderName) {
+function updateImages (folderName) {
   // Don't update if we don't need to.
   if (rfbf.currentFolder === folderName) {
     return;
@@ -63,9 +63,11 @@ function updateImages(folderName) {
 
       // Sort according to bias and save to local data
       rfbf.sites = data.sites.sort(function (a, b) {
-        if (a.bias < b.bias) { return -1; }
-        else if (a.bias > b.bias) { return 1; }
-        else { return 0; }
+        if (a.bias < b.bias) {
+          return -1;
+        } else if (a.bias > b.bias) {
+          return 1;
+        } else { return 0; }
       });
 
       // Insert them into the DOM
@@ -74,19 +76,18 @@ function updateImages(folderName) {
         var site = rfbf.sites[i];
         var imgURL = rfbf.baseURL + site.filePath;
         var bias = rfbf.biasClasses[site.bias] || 'bias-3';
-        $('.sites').append(' \
-        <li class="site">\
-          <a href="' + site.url + '" title="' + site.name + '" target="_blank">\
-            <div class="siteTitle ' + bias + '">' + site.name + '</div>\
-          </a>\
-          <img src=' + imgURL + ' class="siteImage"> \
-        </li> \
-        ');
+        var siteHTML =
+        '<li class="site">' +
+          '<a href="' + site.url + '" title="' + site.name + '" target="_blank">' +
+            '<div class="siteTitle ' + bias + '">' + site.name + '</div>' +
+          '</a>' +
+          '<img src=' + imgURL + ' class="siteImage">' +
+        '</li>';
+        $('.sites').append(siteHTML);
       }
 
       centerInViewport('.site:nth-child(' + Math.floor(rfbf.sites.length / 2) + ')', '.scrollContainer');
-    }
-  );
+    });
 }
 
 // Find the closest available folder to the requested date
@@ -97,7 +98,7 @@ function closestFolderToDate (requestedDate) {
   var dClosest = Number.MAX_VALUE;
   for (var i = 0; i < rfbf.availableDates.length; i++) {
     var candidate = rfbf.availableDates[i];
-    dCandidate = Math.abs(candidate.unix() - requestedDate.unix());
+    var dCandidate = Math.abs(candidate.unix() - requestedDate.unix());
     if (dCandidate < dClosest) {
       closestDate = candidate;
       dClosest = dCandidate;
@@ -112,7 +113,7 @@ function closestFolderToDate (requestedDate) {
   return closestDate.format('YYYY-MM-DD_HH')
 }
 
-function generateAllowedTimes(frequency) {
+function generateAllowedTimes (frequency) {
   // Generate a list of times to choose from, based on our offset.
   // Server folder names are every 2 hours UTC, so get local times based on that.
 
@@ -165,7 +166,7 @@ function updateCatalog (cb) {
         //   '00:00', '02:00', '04:00', '06:00', '08:00', '10:00',
         //   '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'
         // ],
-        onChangeDateTime: function (dp,$input) {
+        onChangeDateTime: function (dp, $input) {
           // This value comes back as a string in the format specified by the picker
           // default 'Y/m/d H:i'
           // See https://xdsoft.net/jqplugins/datetimepicker/#format
@@ -177,14 +178,14 @@ function updateCatalog (cb) {
           requestedDate.utcOffset(moment().utcOffset());
           requestedDate.utc();
           var closestFolder = closestFolderToDate(requestedDate);
-          location = '/?date=' + encodeURIComponent(requestedDate.toISOString());
+          window.location = '/?date=' + encodeURIComponent(requestedDate.toISOString());
           updateImages(closestFolder);
-        },
+        }
       });
 
       rfbf.showingCalendar = false;
 
-      $('#calendar').click(function(){
+      $('#calendar').click(function () {
         if (rfbf.showingCalendar) {
           $('#datetimepicker').datetimepicker('hide');
           rfbf.showingCalendar = false;
@@ -195,17 +196,17 @@ function updateCatalog (cb) {
       });
 
       if (cb) { cb() }
-    }
-  );
+    });
 }
 
-updateCatalog(function() {
+updateCatalog(function () {
   // an ISO string
   var queryDate = moment(getParameterByName('date'));
   if (queryDate && queryDate.isValid()) {
     queryDate.local();
     updateImages(closestFolderToDate(queryDate));
   } else {
+    // load today
     updateImages();
   }
 });

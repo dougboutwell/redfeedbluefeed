@@ -1,0 +1,20 @@
+extends: eslint-config-standard
+
+parserOptions:
+  ecmaVersion: 5
+  sourceType: script
+
+env:
+  browser: true
+  jquery: true
+
+rules:
+  key-spacing: 0
+  semi: 0
+  brace-style:
+    - 2
+    - 1tbs
+    - allowSingleLine: true
+
+globals:
+  moment: false
