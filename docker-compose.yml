@@ -6,9 +6,3 @@ services:
     volumes:
       - ./credentials:/home/node/credentials
     restart: unless-stopped
-
-  site:
-    image: dougboutwell/redfeedbluefeed-site:latest
-    ports:
-      - "80:80"
-    restart: unless-stopped
