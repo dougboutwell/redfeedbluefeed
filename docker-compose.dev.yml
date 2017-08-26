@@ -12,3 +12,5 @@ services:
     restart: "no"
     environment:
       - NODE_ENV=dev
+    volumes:
+      - ./site/html:/usr/share/nginx/html
