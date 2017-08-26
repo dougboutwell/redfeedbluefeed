@@ -14,8 +14,20 @@ var rfbf = {
   pickerSel: '#datetimepicker'
 }
 
-if (/localhost/.test(location.hostname)) {
+if (/localhost/.test(location.hostname) && 0) {
   rfbf.baseURL = 'http://storage.googleapis.com/redfeedbluefeed-snaps-mobile-staging/';
+}
+
+// Always a handy snippet...
+// https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
 // Scroll horizontally to center the element referenced by sel in containerSel
@@ -35,7 +47,7 @@ function updateImages(folderName) {
   rfbf.currentFolder = folderName;
 
   var manifestURL;
-  if (!folderName || folderName ==='') {
+  if (!folderName || folderName === '') {
     manifestURL = rfbf.baseURL + rfbf.latestFileName;
   } else {
     manifestURL = rfbf.baseURL + folderName + '/' + rfbf.manifestFileName;
@@ -77,8 +89,51 @@ function updateImages(folderName) {
   );
 }
 
+// Find the closest available folder to the requested date
+// date - a moment object in local time
+function closestFolderToDate (requestedDate) {
+  // Find the closest available date to the date requested
+  var closestDate;
+  var dClosest = Number.MAX_VALUE;
+  for (var i = 0; i < rfbf.availableDates.length; i++) {
+    var candidate = rfbf.availableDates[i];
+    dCandidate = Math.abs(candidate.unix() - requestedDate.unix());
+    if (dCandidate < dClosest) {
+      closestDate = candidate;
+      dClosest = dCandidate;
+    }
+  }
 
-function updateCatalog () {
+  // Tag the mathced date as local time, then convert back to UTC
+  // Server folders are UTC, but we convert times to local for display
+  // in the client
+  closestDate.utcOffset(moment().utcOffset());
+  closestDate.utc();
+  return closestDate.format('YYYY-MM-DD_HH')
+}
+
+function generateAllowedTimes(frequency) {
+  // Generate a list of times to choose from, based on our offset.
+  // Server folder names are every 2 hours UTC, so get local times based on that.
+
+  // leftover offset in minutes
+  var offset = (moment().utcOffset()) % (frequency * 60);
+  // make sure it's positive
+  while (offset < 0) { offset += 60 * frequency }
+  // Generate strings representing the offset
+  var offsetHours = offset / 60;
+  var offsetMinutes = offset % 60;
+  var allowedTimes = [];
+  for (var i = 0; i < 24 / frequency; i++) {
+    var hour = (i * frequency) + offsetHours;
+    var hourString = hour < 10 ? '0' + hour : hour.toString();
+    var minuteString = offsetMinutes < 10 ? '0' + offsetMinutes : offsetMinutes.toString();
+    allowedTimes.push(hourString + ':' + minuteString);
+  }
+  return allowedTimes;
+}
+
+function updateCatalog (cb) {
   var catalogURL = rfbf.baseURL + rfbf.catalogFileName;
   $.ajax(catalogURL, {cache: false})
     .done(function (data) {
@@ -89,6 +144,7 @@ function updateCatalog () {
         var folderName = data.folderNames[i];
         var pieces = folderName.split('_');
         var folderDate = moment(pieces[0]);
+        folderDate.utcOffset(0);
         folderDate.hour(pieces[1]);
         folderDate.local();
         rfbf.availableDates.push(folderDate);
@@ -103,12 +159,12 @@ function updateCatalog () {
         minDate: rfbf.minDate.format('YYYY/MM/DD'),
         maxDate: 0,
         theme: 'dark',
-        // step: 120,
+        allowTimes: generateAllowedTimes(2),
         // TODO: we shouldn't bake allowed times into the client.
-        allowTimes:[
-          '00:00', '02:00', '04:00', '06:00', '08:00', '10:00',
-          '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'
-        ],
+        // allowTimes:[
+        //   '00:00', '02:00', '04:00', '06:00', '08:00', '10:00',
+        //   '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'
+        // ],
         onChangeDateTime: function (dp,$input) {
           // This value comes back as a string in the format specified by the picker
           // default 'Y/m/d H:i'
@@ -116,29 +172,13 @@ function updateCatalog () {
           var val = $input.val();
 
           // Parse this to a moment
+          // I believe this constructor assumes local time
           var requestedDate = moment(val, 'YYYY/MM/DD HH:mm');
-
-          // Find the closest available date to the date requested
-          var closestDate;
-          var dClosest = Number.MAX_VALUE;
-
-          for (var i = 0; i < rfbf.availableDates.length; i++) {
-            var candidate = rfbf.availableDates[i];
-            dCandidate = Math.abs(candidate.unix() - requestedDate.unix());
-            if (dCandidate < dClosest) {
-              closestDate = candidate;
-              dClosest = dCandidate;
-            }
-          }
-
-          // Tag the mathced date as local time, then convert back to UTC
-          // Server folders are UTC, but we convert times to local for display
-          // in the client
-          closestDate.utcOffset(moment().utcOffset());
-          closestDate.utc();
-          var folderName = closestDate.format('YYYY-MM-DD_HH')
-
-          updateImages(folderName);
+          requestedDate.utcOffset(moment().utcOffset());
+          requestedDate.utc();
+          var closestFolder = closestFolderToDate(requestedDate);
+          location = '/?date=' + encodeURIComponent(requestedDate.toISOString());
+          updateImages(closestFolder);
         },
       });
 
@@ -153,13 +193,19 @@ function updateCatalog () {
           rfbf.showingCalendar = true;
         }
       });
+
+      if (cb) { cb() }
     }
   );
 }
 
-function initDateTimePicker () {
-}
-
-initDateTimePicker();
-updateCatalog();
-updateImages();
+updateCatalog(function() {
+  // an ISO string
+  var queryDate = moment(getParameterByName('date'));
+  if (queryDate && queryDate.isValid()) {
+    queryDate.local();
+    updateImages(closestFolderToDate(queryDate));
+  } else {
+    updateImages();
+  }
+});
