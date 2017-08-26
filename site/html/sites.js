@@ -161,11 +161,6 @@ function updateCatalog (cb) {
         maxDate: 0,
         theme: 'dark',
         allowTimes: generateAllowedTimes(2),
-        // TODO: we shouldn't bake allowed times into the client.
-        // allowTimes:[
-        //   '00:00', '02:00', '04:00', '06:00', '08:00', '10:00',
-        //   '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'
-        // ],
         onChangeDateTime: function (dp, $input) {
           // This value comes back as a string in the format specified by the picker
           // default 'Y/m/d H:i'
